@@ -61,11 +61,11 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:va
 .reel .ph{position:absolute;left:var(--g);top:clamp(16px,2vw,24px);color:var(--mute)}
 .reel.live .ph,.reel.live .slides{display:none}
 .slides{position:absolute;inset:0}
-.slide{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 2.4s ease-in-out}
+.slide{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 1.6s ease-in-out}
 .slide.on{opacity:1}
 .slide img{width:100%;height:100%;max-width:none;object-fit:cover;display:block;transform:scale(1);filter:saturate(.94)}
-.slide.zoom img{animation:kb 11s linear forwards}
-@keyframes kb{from{transform:scale(1)}to{transform:scale(1.05)}}
+.slide.zoom img{animation:kb 8s cubic-bezier(.25,.1,.25,1) forwards}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.06)}}
 .reel .ph{z-index:2;color:var(--paper);opacity:.9;transition:opacity .4s;text-shadow:0 1px 8px rgba(0,0,0,.45)}
 .reel-ui{text-shadow:0 2px 18px rgba(0,0,0,.25)}
 .reel-ui,.reel .shade{z-index:1}
@@ -236,6 +236,44 @@ footer{border-top:1px solid var(--line)}
   .reel-side .tc{display:none}
 }
 @media (prefers-reduced-motion:reduce){.page.enter,.reel-mark .dot,.tc i{animation:none}.index .row,.play{transition:none}}
+
+/* ===== v4: index view, cursor, wipe ===== */
+.viewbar{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 16px}
+.viewbar .panel-note{margin:0}
+.vtoggle{display:flex;gap:16px}
+.vtoggle button{background:none;border:0;padding:6px 0;color:var(--mute);cursor:pointer;font:inherit}
+.vtoggle button[aria-pressed="true"]{color:var(--paper)}
+.vtoggle button[aria-pressed="true"]::before{content:"";display:inline-block;width:5px;height:5px;background:var(--point);margin-right:7px;vertical-align:2px}
+.windex{display:none;list-style:none;margin:0;padding:0;border-bottom:1px solid var(--line)}
+.panel.as-index .wgrid{display:none}
+.panel.as-index .windex{display:block}
+.windex li{display:grid;grid-template-columns:3.5em minmax(0,5fr) minmax(0,4fr) auto;gap:16px;align-items:baseline;border-top:1px solid var(--line);padding-block:clamp(12px,1.4vw,18px);cursor:pointer;transition:padding .3s,color .3s;color:var(--paper)}
+.windex .n{color:var(--mute)}
+.windex .c{font-family:var(--display);font-weight:500;font-size:clamp(22px,3vw,44px);letter-spacing:-.04em;line-height:1}
+.windex .w{color:var(--mute);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.windex:hover li{color:var(--mute)}
+.windex li:hover{color:var(--paper);padding-left:14px}
+.windex li:hover .c::after{content:"";display:inline-block;width:.18em;height:.18em;background:var(--point);margin-left:.08em}
+.peek{position:fixed;left:0;top:0;width:min(30vw,420px);aspect-ratio:16/9;background:var(--ink-2) center/cover no-repeat;pointer-events:none;z-index:40;opacity:0;transform:translate(32px,-50%) scale(.94);transition:opacity .25s,transform .25s}
+.peek.on{opacity:1;transform:translate(32px,-50%) scale(1)}
+@media (max-width:860px){.windex li{grid-template-columns:2.5em minmax(0,1fr)}.windex .w,.windex .y{grid-column:2}.peek{display:none}}
+@media (pointer:fine){
+  .cur{position:fixed;left:0;top:0;width:8px;height:8px;background:var(--point);pointer-events:none;z-index:60;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;display:flex;align-items:center;justify-content:center;mix-blend-mode:normal}
+  .cur b{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.12em;color:var(--ink);opacity:0;transition:opacity .2s}
+  .cur.big{width:76px;height:76px}
+  .cur.big b{opacity:1}
+  [data-video]:not([data-video=""]),.windex li{cursor:none}
+}
+.wipe{position:fixed;inset:0;background:var(--point);z-index:80;transform:translateY(100%);pointer-events:none;visibility:hidden}
+.wipe.go{visibility:visible}
+.wipe.go{animation:wipe .9s cubic-bezier(.7,0,.2,1)}
+@keyframes wipe{0%{transform:translateY(100%)}45%,55%{transform:translateY(0)}100%{transform:translateY(-100%)}}
+.wipe.in{visibility:visible;animation:wipein .38s cubic-bezier(.7,0,.3,1) forwards}
+.wipe.out{visibility:visible;animation:wipeout .5s cubic-bezier(.7,0,.2,1) .05s both}
+@keyframes wipein{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes wipeout{from{transform:translateY(0)}to{transform:translateY(-100%)}}
+@media (prefers-reduced-motion:reduce){.wipe{display:none}}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
 
 /* multi-page build */
 .page{min-height:calc(100svh - 160px)}
