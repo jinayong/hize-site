@@ -96,7 +96,7 @@
     if (reelEl && reelRow && reelRow.video) reelEl.setAttribute('data-video', reelRow.video);
 
     var stack = document.querySelector('.stack');
-    var feat = com.filter(function(x){ return x.main; }).concat(con.filter(function(x){ return x.main; })).slice(0, 3);
+    var feat = com.filter(function(x){ return x.main; }).concat(con.filter(function(x){ return x.main; })).slice(0, 4);
     var cardHtml = function(x, cls){
       return '<article class="' + cls + '" data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd"><span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
         '<div class="card-meta"><span class="t">' + esc(x.name) + '</span><span class="mono mute">' + esc(x.title) + '</span></div></article>';
