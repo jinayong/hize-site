@@ -48,24 +48,105 @@
   player.addEventListener('click', function(e){ if (e.target === player) closePlayer(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !player.hidden) closePlayer(); });
 
+  /* ---------- content from the Google Sheet "hize 사이트 관리" ---------- */
+  // 시트에서 링크·작업명·연락처를 바꾸면 사이트를 새로고침할 때 바로 반영됩니다.
+  // (시트 공유 설정: 링크가 있는 모든 사용자 — 뷰어)
+  var SHEET_ID = '1dkXuqqjRYJ231Z9CRyqh72LDErF-WWRnnwaqgdhG5g0';
+  var SHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&headers=1';
+
+  function csvRows(text){
+    var rows = [], row = [], cell = '', q = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+      else if (c === '"') q = true;
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+      else cell += c;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows;
+  }
+  function esc(s){ return String(s || '').replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+  function two(n){ return (n < 10 ? '0' : '') + n; }
+
+  function applySheet(rows){
+    if (!rows.length) return;
+    var head = rows.shift().map(function(h){ return h.trim(); });
+    var col = function(name){ return head.indexOf(name); };
+    var iK = col('구분'), iN = col('이름'), iT = col('작업명'), iV = col('영상 링크'), iM = col('메인 노출'), iC = col('분류');
+    if (iK < 0) return;
+    var get = function(r, i){ return i < 0 ? '' : (r[i] || '').trim(); };
+    var items = rows.filter(function(r){ return get(r, iK); }).map(function(r){
+      return { kind: get(r, iK).toLowerCase(), name: get(r, iN), title: get(r, iT), video: get(r, iV), main: /^y/i.test(get(r, iM)), cat: get(r, iC) };
+    });
+    var com = items.filter(function(x){ return x.kind === 'commercial'; });
+    var con = items.filter(function(x){ return x.kind === 'contents' || x.kind === 'content'; });
+    var first = function(k){ return items.filter(function(x){ return x.kind === k; })[0]; };
+    var setting = function(k){ var x = first(k); return x ? (x.video || x.title || x.name) : ''; };
+
+    var reelEl = document.getElementById('reel'), reelRow = first('쇼릴');
+    if (reelEl && reelRow && reelRow.video) reelEl.setAttribute('data-video', reelRow.video);
+
+    var stack = document.querySelector('.stack');
+    var feat = com.filter(function(x){ return x.main; }).concat(con.filter(function(x){ return x.main; }));
+    if (stack && feat.length) {
+      stack.innerHTML = feat.map(function(x, i){
+        var where = con.indexOf(x) >= 0 ? 'Contents' : 'Work';
+        return '<article class="item" data-video="' + esc(x.video) + '">' +
+          '<div class="frame ' + (i === 0 ? 'scope' : 'hd') + '"><span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
+          '<div class="meta"><span class="t">' + esc(x.name) + '</span><span class="mono mute">' + esc([x.title, where].filter(Boolean).join(' · ')) + '</span></div></article>';
+      }).join('');
+    }
+    var list = document.querySelector('.index');
+    if (list && com.length) {
+      list.innerHTML = com.map(function(x){
+        return '<li><button class="row" type="button" data-video="' + esc(x.video) + '"><span class="client">' + esc(x.name) + '</span>' +
+          '<span class="title mono mute">' + esc(x.title) + '</span><span class="cat mono mute">' + esc(x.cat) + '</span><span class="thumb" aria-hidden="true"></span></button></li>';
+      }).join('');
+    }
+    var eps = document.querySelector('.eps');
+    if (eps && con.length) {
+      eps.innerHTML = con.map(function(x){
+        var m = x.title.match(/^(EP\s*\d+)\s*(.*)$/i);
+        var tag = m ? m[1].replace(/\s+/g, '') : '', t = m ? m[2] : x.title;
+        return '<article class="ep" data-video="' + esc(x.video) + '" data-vertical="1"><div class="frame vert"><span class="mono ph">' + esc(tag || x.name) + '</span>' +
+          (tag ? '<span class="mono tag">' + esc(tag) + '</span>' : '') + '<span class="play mono"><span>Play ▶</span></span></div><span class="t">' + esc(t || x.name) + '</span></article>';
+      }).join('');
+    }
+    document.querySelectorAll('.folder').forEach(function(f){
+      var n = f.querySelector('.f-n'); if (!n) return;
+      var key = f.getAttribute('data-tab') || f.getAttribute('href') || '';
+      n.textContent = two(/contents/.test(key) ? con.length : com.length);
+    });
+    var setText = function(id, v){ var el = document.getElementById(id); if (el && v) el.textContent = v; };
+    setText('email', setting('이메일')); setText('phone', setting('전화')); setText('insta', setting('인스타'));
+  }
+
   /* clickable works */
-  document.querySelectorAll('[data-video]').forEach(function(el){
-    if (el.id === 'reel') return;
-    var frame = el.querySelector('.frame') || el.querySelector('.thumb');
-    thumbFor(el, frame);
-    var url = el.getAttribute('data-video');
-    if (!parse(url)) return;
-    if (el.tagName !== 'BUTTON') { el.tabIndex = 0; el.setAttribute('role','button'); }
-    var title = (el.querySelector('.t, .client') || {}).textContent;
-    var go = function(){ openPlayer(url, title, el.hasAttribute('data-vertical')); };
-    el.addEventListener('click', go);
-    el.addEventListener('keydown', function(e){ if (el.tagName !== 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); go(); } });
-  });
+  function bindWorks(){
+    document.querySelectorAll('[data-video]').forEach(function(el){
+      if (el.id === 'reel' || el.dataset.bound) return;
+      el.dataset.bound = '1';
+      var frame = el.querySelector('.frame') || el.querySelector('.thumb');
+      thumbFor(el, frame);
+      var url = el.getAttribute('data-video');
+      if (!parse(url)) return;
+      if (el.tagName !== 'BUTTON') { el.tabIndex = 0; el.setAttribute('role','button'); }
+      var title = (el.querySelector('.t, .client') || {}).textContent;
+      var go = function(){ openPlayer(url, title, el.hasAttribute('data-vertical')); };
+      el.addEventListener('click', go);
+      el.addEventListener('keydown', function(e){ if (el.tagName !== 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); go(); } });
+    });
+  }
 
   /* reel: muted background + play with sound */
-  var reel = document.getElementById('reel'), rv = reel && parse(reel.getAttribute('data-video'));
-  var playBtn = document.getElementById('reel-play');
-  if (rv) {
+  function initReel(){
+    var reel = document.getElementById('reel'), playBtn = document.getElementById('reel-play');
+    if (!reel || !playBtn || reel.classList.contains('live')) return;
+    var rv = parse(reel.getAttribute('data-video'));
+    if (!rv) { playBtn.disabled = true; return; }
+    playBtn.disabled = false;
     var bg = document.createElement('iframe');
     bg.className = 'bg'; bg.src = embed(rv, true); bg.allow = 'autoplay; fullscreen'; bg.title = 'showreel'; bg.tabIndex = -1;
     reel.insertBefore(bg, reel.firstChild);
@@ -77,9 +158,15 @@
     };
     fit(); window.addEventListener('resize', fit);
     playBtn.addEventListener('click', function(){ openPlayer(reel.getAttribute('data-video'), 'hize. Showreel'); });
-  } else if (playBtn) {
-    playBtn.disabled = true;
   }
+
+  function boot(){ bindWorks(); initReel(); }   // safe to call more than once
+  try {
+    fetch(SHEET_URL).then(function(r){ if (!r.ok) throw new Error(r.status); return r.text(); })
+      .then(function(t){ try { applySheet(csvRows(t)); } catch (e) {} boot(); })
+      .catch(boot);
+  } catch (e) { boot(); }
+  setTimeout(boot, 4000);
 
   /* timecode */
   var t0 = performance.now(), tcs = document.querySelectorAll('.tc-val');

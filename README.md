@@ -18,26 +18,29 @@ hize-site/
    └─ img/work/                 작업 썸네일 (선택)
 ```
 
-## 영상 연결하는 법 (유튜브 · 비메오)
-영상 자리마다 `data-video=""` 가 있어요. 따옴표 안에 주소만 붙여 넣으면 돼요.
+## 내용 바꾸는 법 — 구글 시트 "hize 사이트 관리"
+영상 링크, 작업명, 연락처는 모두 구글 드라이브의 "hize 사이트 관리" 시트에서 바꿔요.
+시트를 고치고 사이트를 새로고침하면 바로 반영돼요. GitHub이나 코드는 건드리지 않아도 돼요.
 
-- 쇼릴 — index.html 의 `<section class="reel" ... data-video="">`
-  → 첫 화면 배경에 무음 반복 재생, Play reel 버튼은 소리와 함께 크게 재생
-- 대표작 — index.html 의 `<article class="item" data-video="">`
-- Commercial — work/index.html 과 work/commercial/index.html 의 `<button class="row" ... data-video="">` (두 파일 모두 같은 목록)
-- Contents — work/contents/index.html 의 `<article class="ep" ... data-video="">` (세로 영상)
+시트 칸
+- 구분: commercial / contents / 쇼릴 / 이메일 / 전화 / 인스타
+- 이름: 클라이언트명 또는 시리즈명
+- 작업명: contents는 "EP1 제목"처럼 쓰면 EP 라벨이 자동으로 붙어요
+- 영상 링크: 유튜브·비메오 주소 (이메일·전화·인스타는 이 칸에 값을 적어요)
+- 메인 노출: Y 를 적으면 Home 대표작에 나와요
+- 분류: Work 목록 오른쪽에 작게 나오는 라벨 (Brand, Public 등)
+
+작업 추가는 한 줄 추가, 삭제는 그 줄 삭제, 순서는 줄 순서대로예요.
+
+처음 한 번만: 시트 오른쪽 위 [공유] → 일반 액세스를 "링크가 있는 모든 사용자 · 뷰어"로 바꿔주세요.
+(사이트에 공개될 내용만 들어 있는 시트예요.)
 
 지원 주소
-- 유튜브: youtube.com/watch?v=…, youtu.be/…, youtube.com/shorts/…
-- 비메오: vimeo.com/123456789 (비공개 링크는 vimeo.com/123456789/abcdef 형태 그대로)
-
-썸네일
-- 유튜브는 자동으로 붙어요.
-- 비메오나 직접 고른 이미지는 assets/img/work/ 에 넣고 `data-thumb="../../assets/img/work/파일.jpg"` 를 함께 적어주세요.
+- 유튜브: youtube.com/watch?v=…, youtu.be/…, youtube.com/shorts/… (썸네일 자동)
+- 비메오: vimeo.com/123456789, 비공개 링크는 vimeo.com/123456789/abcdef 그대로
 - 비메오를 쇼릴 배경으로 쓰려면 비메오 유료 플랜(Plus 이상)이 필요해요.
 
-## 채워 넣을 것
-- [작업명], [EMAIL], [PHONE], [@HANDLE]
+시트를 못 불러오면 HTML에 들어 있는 기본 내용이 그대로 보여요.
 
 ## 컬러 · 서체
 - 블랙 #0E0E0D · 오프화이트 #F3F3F0 · 포인트 레드 #FF3B1F
