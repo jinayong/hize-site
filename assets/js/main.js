@@ -18,8 +18,13 @@
     if (bg) p += '&background=1';
     return 'https://player.vimeo.com/video/' + v.id + '?' + p;
   }
+  var ASSET_BASE = (function(){
+    var l = document.querySelector('link[href*="assets/css/style.css"]');
+    return l ? l.getAttribute('href').replace('assets/css/style.css', '') : '';
+  })();
+  function asset(u){ return (!u || /^(https?:|\/|data:|blob:)/.test(u)) ? u : ASSET_BASE + u; }
   function thumbFor(el, frame){
-    var t = el.getAttribute('data-thumb');
+    var t = asset(el.getAttribute('data-thumb'));
     var v = parse(el.getAttribute('data-video'));
     if (!t && v && v.kind === 'yt') t = 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg';
     if (t && frame) { frame.style.backgroundImage = 'url("' + t + '")'; frame.classList.add('has-thumb'); }
@@ -74,11 +79,13 @@
     if (!rows.length) return;
     var head = rows.shift().map(function(h){ return h.trim(); });
     var col = function(name){ return head.indexOf(name); };
-    var iK = col('구분'), iN = col('이름'), iT = col('작업명'), iV = col('영상 링크'), iM = col('메인 노출'), iC = col('분류');
+    var iK = col('구분'), iN = col('이름'), iT = col('작업명'), iV = col('영상 링크'), iM = col('메인 노출'), iC = col('분류'), iTh = col('썸네일');
+    // 작업 목록은 '썸네일' 칸이 있는 시트일 때만 시트 내용으로 바꿉니다(그 전에는 사이트에 든 목록을 그대로 씀).
+    var full = iTh >= 0;
     if (iK < 0) return;
     var get = function(r, i){ return i < 0 ? '' : (r[i] || '').trim(); };
     var items = rows.filter(function(r){ return get(r, iK); }).map(function(r){
-      return { kind: get(r, iK).toLowerCase(), name: get(r, iN), title: get(r, iT), video: get(r, iV), main: /^y/i.test(get(r, iM)), cat: get(r, iC) };
+      return { kind: get(r, iK).toLowerCase(), name: get(r, iN), title: get(r, iT), video: get(r, iV), main: /^y/i.test(get(r, iM)), cat: get(r, iC), thumb: get(r, iTh) };
     });
     var com = items.filter(function(x){ return x.kind === 'commercial'; });
     var con = items.filter(function(x){ return x.kind === 'contents' || x.kind === 'content'; });
@@ -90,23 +97,24 @@
 
     var stack = document.querySelector('.stack');
     var feat = com.filter(function(x){ return x.main; }).concat(con.filter(function(x){ return x.main; }));
-    if (stack && feat.length) {
+    var ta = function(x){ return x.thumb ? ' data-thumb="' + esc(/[\/:]/.test(x.thumb) ? x.thumb : 'assets/img/work/' + x.thumb) + '"' : ''; };
+    if (full && stack && feat.length) {
       stack.innerHTML = feat.map(function(x, i){
         var where = con.indexOf(x) >= 0 ? 'Contents' : 'Work';
-        return '<article class="item" data-video="' + esc(x.video) + '">' +
+        return '<article class="item" data-video="' + esc(x.video) + '"' + ta(x) + '>' +
           '<div class="frame ' + (i === 0 ? 'scope' : 'hd') + '"><span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
           '<div class="meta"><span class="t">' + esc(x.name) + '</span><span class="mono mute">' + esc([x.title, where].filter(Boolean).join(' · ')) + '</span></div></article>';
       }).join('');
     }
     var list = document.querySelector('.index');
-    if (list && com.length) {
+    if (full && list && com.length) {
       list.innerHTML = com.map(function(x){
-        return '<li><button class="row" type="button" data-video="' + esc(x.video) + '"><span class="client">' + esc(x.name) + '</span>' +
+        return '<li><button class="row" type="button" data-video="' + esc(x.video) + '"' + ta(x) + '><span class="client">' + esc(x.name) + '</span>' +
           '<span class="title mono mute">' + esc(x.title) + '</span><span class="cat mono mute">' + esc(x.cat) + '</span><span class="thumb" aria-hidden="true"></span></button></li>';
       }).join('');
     }
     var eps = document.querySelector('.eps');
-    if (eps && con.length) {
+    if (full && eps && con.length) {
       eps.innerHTML = con.map(function(x){
         var m = x.title.match(/^(EP\s*\d+)\s*(.*)$/i);
         var tag = m ? m[1].replace(/\s+/g, '') : '', t = m ? m[2] : x.title;
@@ -115,7 +123,7 @@
       }).join('');
     }
     document.querySelectorAll('.folder').forEach(function(f){
-      var n = f.querySelector('.f-n'); if (!n) return;
+      var n = f.querySelector('.f-n'); if (!n || !full) return;
       var key = f.getAttribute('data-tab') || f.getAttribute('href') || '';
       n.textContent = two(/contents/.test(key) ? con.length : com.length);
     });
