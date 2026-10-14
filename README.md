@@ -8,7 +8,7 @@ hize-site/
 ├─ work/
 │  ├─ index.html                Work (Commercial 폴더가 기본으로 열림)
 │  ├─ commercial/index.html     Commercial — 클라이언트 광고 · 공공 캠페인
-│  └─ contents/index.html       Contents — 직접 기획한 오리지널 · AI 콘텐츠
+│  └─ contents/index.html       Contents — 오리지널 · AI 콘텐츠
 ├─ contact/index.html           Contact — 문의
 └─ assets/
    ├─ css/style.css             스타일 (컬러·서체 토큰은 맨 위 :root)
