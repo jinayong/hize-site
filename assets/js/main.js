@@ -136,7 +136,12 @@
       var key = f.getAttribute('data-tab') || f.getAttribute('href') || '';
       n.textContent = two(/contents/.test(key) ? con.length : com.length);
     });
-    var setText = function(id, v){ var el = document.getElementById(id); if (el && v) el.textContent = v; };
+    var setText = function(id, v){
+      var el = document.getElementById(id); if (!el || !v || /^\[|0000/.test(v)) return;
+      el.textContent = v;
+      if (id === 'email') el.setAttribute('href', 'mailto:' + v + '?subject=' + encodeURIComponent('[hize] 프로젝트 문의'));
+      if (id === 'phone') el.setAttribute('href', 'tel:' + v.replace(/[^\d+]/g, ''));
+    };
     setText('email', setting('이메일')); setText('phone', setting('전화')); setText('insta', setting('인스타'));
   }
 
