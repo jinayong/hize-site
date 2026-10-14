@@ -157,11 +157,15 @@
     var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     slideTimer = setInterval(function(){
       if (document.hidden) return;
-      list[i].classList.remove('on');
+      var prev = list[i];
+      prev.classList.remove('on');
+      setTimeout(function(){ if (!prev.classList.contains('on')) prev.classList.remove('zoom'); }, 2600);
       i = (i + 1) % list.length;
-      list[i].classList.add('on');
-      if (label) label.textContent = list[i].getAttribute('data-label');
-    }, still ? 7000 : 5000);
+      var cur = list[i];
+      cur.classList.remove('zoom'); void cur.offsetWidth;
+      cur.classList.add('zoom', 'on');
+      if (label) label.textContent = cur.getAttribute('data-label');
+    }, still ? 8000 : 6000);
   }
   function initReel(){
     var reel = document.getElementById('reel'), playBtn = document.getElementById('reel-play');
