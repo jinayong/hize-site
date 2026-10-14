@@ -112,13 +112,23 @@
     if (full && list && com.length) {
       list.innerHTML = com.map(function(x){ return cardHtml(x, 'card'); }).join('');
     }
-    var eps = document.querySelector('.eps');
-    if (full && eps && con.length) {
-      eps.innerHTML = con.map(function(x){
-        var m = x.title.match(/^(EP\s*\d+)\s*(.*)$/i);
-        var tag = m ? m[1].replace(/\s+/g, '') : '', t = m ? m[2] : x.title;
-        return '<article class="ep" data-video="' + esc(x.video) + '" data-vertical="1"><div class="frame vert"><span class="mono ph">' + esc(tag || x.name) + '</span>' +
-          (tag ? '<span class="mono tag">' + esc(tag) + '</span>' : '') + '<span class="play mono"><span>Play ▶</span></span></div><span class="t">' + esc(t || x.name) + '</span></article>';
+    var slist = document.querySelector('.series-list');
+    if (full && slist && con.length) {
+      var groups = [], byName = {};
+      con.forEach(function(x){
+        var key = x.cat || x.name || 'Series';
+        if (!byName[key]) { byName[key] = { name: key, items: [] }; groups.push(byName[key]); }
+        byName[key].items.push(x);
+      });
+      slist.innerHTML = groups.map(function(g, gi){
+        var epsHtml = g.items.map(function(x){
+          var m = x.title.match(/^(EP\s*\d+)\s*(.*)$/i);
+          var tag = m ? m[1].replace(/\s+/g, '') : '', t = m ? m[2] : x.title;
+          return '<article class="ep" data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd"><span class="mono ph">' + esc(tag || x.name) + '</span>' +
+            (tag ? '<span class="mono tag">' + esc(tag) + '</span>' : '') + '<span class="play mono"><span>Play ▶</span></span></div><span class="t">' + esc(t || x.name) + '</span></article>';
+        }).join('');
+        return '<section class="series"><div class="series-head"><div class="series-info"><span class="mono mute">Series ' + two(gi + 1) + '</span><h2>' + esc(g.name) + '</h2></div>' +
+          '<div class="series-desc"><p></p><span class="mono mute n">' + g.items.length + ' EP</span></div></div><div class="eps">' + epsHtml + '</div></section>';
       }).join('');
     }
     document.querySelectorAll('.folder').forEach(function(f){
