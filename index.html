@@ -42,7 +42,8 @@
   <div class="page" id="home">
     <!-- 쇼릴: data-video 에 유튜브 또는 비메오 주소를 넣으면 배경으로 무음 재생됩니다 -->
     <section class="reel" id="reel" data-video="" aria-label="쇼릴">
-      <div class="ph mono">Showreel — [유튜브 · 비메오 링크]</div>
+      <div class="slides" id="slides" aria-hidden="false"><figure class="slide on" data-label="SAMSUNG · 메모리가 있어야 내일이 있다"><img src="assets/img/work/w14.webp" alt="SAMSUNG — 메모리가 있어야 내일이 있다"></figure><figure class="slide" data-label="유플러스 · 무너X소연 아무너케 MV"><img src="assets/img/work/w10.webp" alt="유플러스 — 무너X소연 아무너케 MV" loading="lazy"></figure><figure class="slide" data-label="아리수 · 아리수 마시지 마세요"><img src="assets/img/work/w08.webp" alt="아리수 — 아리수 마시지 마세요" loading="lazy"></figure><figure class="slide" data-label="MEGASTUDY · 내가 공부하는 이유!"><img src="assets/img/work/w12.webp" alt="MEGASTUDY — 내가 공부하는 이유!" loading="lazy"></figure><figure class="slide" data-label="정관장 · 정관장 에브리타임_간편하게 힘!"><img src="assets/img/work/w40.webp" alt="정관장 — 정관장 에브리타임_간편하게 힘!" loading="lazy"></figure><figure class="slide" data-label="바슈롬 · 하루 종일 맑은 눈"><img src="assets/img/work/w26.webp" alt="바슈롬 — 하루 종일 맑은 눈" loading="lazy"></figure><figure class="slide" data-label="서울시교육청 · 교육의 확장"><img src="assets/img/work/w13.webp" alt="서울시교육청 — 교육의 확장" loading="lazy"></figure><figure class="slide" data-label="UBERTAXI · Uber Taxi X 네이버 멤버십 _ 인터뷰"><img src="assets/img/work/w22.webp" alt="UBERTAXI — Uber Taxi X 네이버 멤버십 _ 인터뷰" loading="lazy"></figure></div>
+      <div class="ph mono" id="slide-label">SAMSUNG · 메모리가 있어야 내일이 있다</div>
       <div class="shade"></div>
       <div class="reel-ui">
         <div class="reel-mark" aria-hidden="true">hize<span class="dot"></span></div>
@@ -56,33 +57,12 @@
     <div class="wrap">
       <div class="intro">
         <p>스타일리시하고 진정성 있는 광고를 연출합니다.</p>
-        <span class="mono mute">Selected</span>
+        <span class="mono mute">Latest</span>
       </div>
-      <div class="stack">
-        <article class="item" data-video="" data-thumb="assets/img/work/w14.webp">
-          <div class="frame scope"><span class="mono ph">SAMSUNG</span><span class="play mono"><span>Play ▶</span></span></div>
-          <div class="meta"><span class="t">SAMSUNG</span><span class="mono mute">메모리가 있어야 내일이 있다 · BRAND FILM</span></div>
-        </article>
-        <article class="item" data-video="https://www.youtube.com/watch?v=_Ll5iGOyWZA" data-thumb="assets/img/work/w10.webp">
-          <div class="frame hd"><span class="mono ph">유플러스</span><span class="play mono"><span>Play ▶</span></span></div>
-          <div class="meta"><span class="t">유플러스</span><span class="mono mute">무너X소연 아무너케 MV · DIGITAL</span></div>
-        </article>
-        <article class="item" data-video="https://www.youtube.com/watch?v=mnU4ztmOj3k" data-thumb="assets/img/work/w08.webp">
-          <div class="frame hd"><span class="mono ph">아리수</span><span class="play mono"><span>Play ▶</span></span></div>
-          <div class="meta"><span class="t">아리수</span><span class="mono mute">아리수 마시지 마세요 · TVCF</span></div>
-        </article>
-        <article class="item" data-video="https://www.youtube.com/watch?v=2wBV0RaBfp0" data-thumb="assets/img/work/w12.webp">
-          <div class="frame hd"><span class="mono ph">MEGASTUDY</span><span class="play mono"><span>Play ▶</span></span></div>
-          <div class="meta"><span class="t">MEGASTUDY</span><span class="mono mute">내가 공부하는 이유! · DIGITAL</span></div>
-        </article>
-        <article class="item" data-video="https://www.youtube.com/watch?v=6J2LXjav9js" data-thumb="assets/img/work/w40.webp">
-          <div class="frame hd"><span class="mono ph">정관장</span><span class="play mono"><span>Play ▶</span></span></div>
-          <div class="meta"><span class="t">정관장</span><span class="mono mute">정관장 에브리타임_간편하게 힘! · TVC</span></div>
-        </article>
-        <article class="item" data-video="https://www.youtube.com/watch?v=Z5Y_XTUMdS8" data-thumb="assets/img/work/w26.webp">
-          <div class="frame hd"><span class="mono ph">바슈롬</span><span class="play mono"><span>Play ▶</span></span></div>
-          <div class="meta"><span class="t">바슈롬</span><span class="mono mute">하루 종일 맑은 눈 · TVCF</span></div>
-        </article>
+      <div class="stack latest">
+        <article class="item" data-video="https://www.youtube.com/watch?v=_5mBI0pstNs" data-thumb="assets/img/work/w03.webp"><div class="frame hd"><span class="mono ph">삼성증권</span><span class="play mono"><span>Play ▶</span></span></div><div class="card-meta"><span class="t">삼성증권</span><span class="mono mute">삼투압</span></div></article>
+        <article class="item" data-video="https://www.youtube.com/watch?v=RPUCzMxZFAs" data-thumb="assets/img/work/w04.webp"><div class="frame hd"><span class="mono ph">유한젠</span><span class="play mono"><span>Play ▶</span></span></div><div class="card-meta"><span class="t">유한젠</span><span class="mono mute">더하자, 유한젠</span></div></article>
+        <article class="item" data-video="https://www.youtube.com/watch?v=tffpIHFE64Y" data-thumb="assets/img/work/w05.webp"><div class="frame hd"><span class="mono ph">인천도시공사</span><span class="play mono"><span>Play ▶</span></span></div><div class="card-meta"><span class="t">인천도시공사</span><span class="mono mute">인천을 새롭게 공간을 바꾸다</span></div></article>
       </div>
       <div class="more"><a class="textlink mono" href="work/index.html">All work <span aria-hidden="true">→</span></a></div>
     </div>

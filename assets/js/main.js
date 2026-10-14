@@ -96,22 +96,21 @@
     if (reelEl && reelRow && reelRow.video) reelEl.setAttribute('data-video', reelRow.video);
 
     var stack = document.querySelector('.stack');
-    var feat = com.filter(function(x){ return x.main; }).concat(con.filter(function(x){ return x.main; }));
+    var feat = com.filter(function(x){ return x.main; }).concat(con.filter(function(x){ return x.main; })).slice(0, 3);
+    var cardHtml = function(x, cls){
+      return '<article class="' + cls + '" data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd"><span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
+        '<div class="card-meta"><span class="t">' + esc(x.name) + '</span><span class="mono mute">' + esc(x.title) + '</span></div></article>';
+    };
     var ta = function(x){ return x.thumb ? ' data-thumb="' + esc(/[\/:]/.test(x.thumb) ? x.thumb : 'assets/img/work/' + x.thumb) + '"' : ''; };
     if (full && stack && feat.length) {
       stack.innerHTML = feat.map(function(x, i){
         var where = con.indexOf(x) >= 0 ? 'Contents' : 'Work';
-        return '<article class="item" data-video="' + esc(x.video) + '"' + ta(x) + '>' +
-          '<div class="frame ' + (i === 0 ? 'scope' : 'hd') + '"><span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
-          '<div class="meta"><span class="t">' + esc(x.name) + '</span><span class="mono mute">' + esc([x.title, where].filter(Boolean).join(' · ')) + '</span></div></article>';
+        return cardHtml(x, 'item');
       }).join('');
     }
-    var list = document.querySelector('.index');
+    var list = document.querySelector('.wgrid');
     if (full && list && com.length) {
-      list.innerHTML = com.map(function(x){
-        return '<li><button class="row" type="button" data-video="' + esc(x.video) + '"' + ta(x) + '><span class="client">' + esc(x.name) + '</span>' +
-          '<span class="title mono mute">' + esc(x.title) + '</span><span class="cat mono mute">' + esc(x.cat) + '</span><span class="thumb" aria-hidden="true"></span></button></li>';
-      }).join('');
+      list.innerHTML = com.map(function(x){ return cardHtml(x, 'card'); }).join('');
     }
     var eps = document.querySelector('.eps');
     if (full && eps && con.length) {
@@ -149,11 +148,26 @@
   }
 
   /* reel: muted background + play with sound */
+  /* reel stills: crossfade until a showreel link is set */
+  var slideTimer = null;
+  function startSlides(){
+    var box = document.getElementById('slides'); if (!box || slideTimer) return;
+    var list = box.querySelectorAll('.slide'), label = document.getElementById('slide-label'), i = 0;
+    if (list.length < 2) return;
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    slideTimer = setInterval(function(){
+      if (document.hidden) return;
+      list[i].classList.remove('on');
+      i = (i + 1) % list.length;
+      list[i].classList.add('on');
+      if (label) label.textContent = list[i].getAttribute('data-label');
+    }, still ? 7000 : 5000);
+  }
   function initReel(){
     var reel = document.getElementById('reel'), playBtn = document.getElementById('reel-play');
     if (!reel || !playBtn || reel.classList.contains('live')) return;
     var rv = parse(reel.getAttribute('data-video'));
-    if (!rv) { playBtn.disabled = true; return; }
+    if (!rv) { playBtn.disabled = true; startSlides(); return; }
     playBtn.disabled = false;
     var bg = document.createElement('iframe');
     bg.className = 'bg'; bg.src = embed(rv, true); bg.allow = 'autoplay; fullscreen'; bg.title = 'showreel'; bg.tabIndex = -1;
