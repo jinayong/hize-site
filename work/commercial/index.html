@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Commercial — hize.</title>
+<meta name="description" content="hize — 광고 연출 감독 박진용의 프로덕션. Film / Advertising / Production.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400&family=Noto+Sans+KR:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="../../index.html" aria-label="hize 홈">hize<span class="dot"></span></a>
+    <nav class="menu mono" aria-label="주요 메뉴">
+      <a href="../../index.html" data-nav="home">Home</a>
+      <a href="../../about/index.html" data-nav="about">About</a>
+      <a href="../../work/index.html" data-nav="work" aria-current="page">Work</a>
+      <a href="../../contact/index.html" data-nav="contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="page" id="work">
+    <div class="wrap">
+      <div class="page-head">
+        <h1 class="page-title">Work</h1>
+        <span class="mono mute">2 Folders</span>
+      </div>
+      <div class="folders" aria-label="Work 폴더">
+        <a class="folder" href="../../work/commercial/index.html" aria-current="page"><span class="f-name">Commercial</span><span class="f-n mono">05</span></a>
+        <a class="folder" href="../../work/contents/index.html"><span class="f-name">Contents</span><span class="f-n mono">01</span></a>
+      </div>
+      <div class="panel" id="panel-commercial" role="tabpanel" aria-labelledby="tab-commercial" data-panel="commercial">
+        <p class="panel-note mono mute">클라이언트 광고 · 공공 캠페인</p>
+        <ul class="index">
+        <li><button class="row" type="button" data-video=""><span class="client">LG U+</span><span class="title mono mute">[작업명]</span><span class="cat mono mute">Brand</span><span class="thumb" aria-hidden="true"></span></button></li>
+        <li><button class="row" type="button" data-video=""><span class="client">삼성</span><span class="title mono mute">[작업명]</span><span class="cat mono mute">Brand</span><span class="thumb" aria-hidden="true"></span></button></li>
+        <li><button class="row" type="button" data-video=""><span class="client">CJENM</span><span class="title mono mute">[작업명]</span><span class="cat mono mute">Brand</span><span class="thumb" aria-hidden="true"></span></button></li>
+        <li><button class="row" type="button" data-video=""><span class="client">허쉬</span><span class="title mono mute">[작업명]</span><span class="cat mono mute">Brand</span><span class="thumb" aria-hidden="true"></span></button></li>
+        <li><button class="row" type="button" data-video=""><span class="client">식품의약품안전처</span><span class="title mono mute">[작업명]</span><span class="cat mono mute">Public</span><span class="thumb" aria-hidden="true"></span></button></li>
+      </ul>
+      </div>
+          </div>
+  </div>
+
+  
+</main>
+
+<footer>
+  <div class="wrap foot mono mute">
+    <span>© hize.</span>
+    <span>Film / Advertising / Production</span>
+  </div>
+</footer>
+
+<div class="player" id="player" hidden role="dialog" aria-modal="true" aria-label="영상 플레이어">
+  <button class="x mono" type="button" id="player-x">Close ✕</button>
+  <div class="screen" id="screen"></div>
+  <div class="bar2"><span class="mono mute" id="player-title"></span><a class="mono textlink" id="player-link" href="#" target="_blank" rel="noopener">Open ↗</a></div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contents — hize.</title>
+<meta name="description" content="hize — 광고 연출 감독 박진용의 프로덕션. Film / Advertising / Production.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400&family=Noto+Sans+KR:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="../../index.html" aria-label="hize 홈">hize<span class="dot"></span></a>
+    <nav class="menu mono" aria-label="주요 메뉴">
+      <a href="../../index.html" data-nav="home">Home</a>
+      <a href="../../about/index.html" data-nav="about">About</a>
+      <a href="../../work/index.html" data-nav="work" aria-current="page">Work</a>
+      <a href="../../contact/index.html" data-nav="contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="page" id="work">
+    <div class="wrap">
+      <div class="page-head">
+        <h1 class="page-title">Work</h1>
+        <span class="mono mute">2 Folders</span>
+      </div>
+      <div class="folders" aria-label="Work 폴더">
+        <a class="folder" href="../../work/commercial/index.html"><span class="f-name">Commercial</span><span class="f-n mono">05</span></a>
+        <a class="folder" href="../../work/contents/index.html" aria-current="page"><span class="f-name">Contents</span><span class="f-n mono">01</span></a>
+      </div>
+      <div class="panel" id="panel-contents" role="tabpanel" aria-labelledby="tab-contents" data-panel="contents">
+        <p class="panel-note mono mute">직접 기획한 오리지널 · AI 콘텐츠</p>
+        <div class="series">
+        <div class="series-info">
+          <span class="mono mute">AI Short-form Drama</span>
+          <h2>고백은 NG</h2>
+          <p>직접 기획하고 AI로 제작한 숏폼 드라마 시리즈입니다.</p>
+        </div>
+        <div class="eps">
+          <article class="ep" data-video="" data-vertical="1">
+            <div class="frame vert"><span class="mono ph">[EP1 영상]</span><span class="mono tag">EP1</span><span class="play mono"><span>Play ▶</span></span></div>
+            <span class="t">그런 대사 없는데?</span>
+          </article>
+          <article class="ep" data-video="" data-vertical="1">
+            <div class="frame vert"><span class="mono ph">[EP2 영상]</span><span class="mono tag">EP2</span><span class="play mono"><span>Play ▶</span></span></div>
+            <span class="t">연기였잖아</span>
+          </article>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</main>
+
+<footer>
+  <div class="wrap foot mono mute">
+    <span>© hize.</span>
+    <span>Film / Advertising / Production</span>
+  </div>
+</footer>
+
+<div class="player" id="player" hidden role="dialog" aria-modal="true" aria-label="영상 플레이어">
+  <button class="x mono" type="button" id="player-x">Close ✕</button>
+  <div class="screen" id="screen"></div>
+  <div class="bar2"><span class="mono mute" id="player-title"></span><a class="mono textlink" id="player-link" href="#" target="_blank" rel="noopener">Open ↗</a></div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About — hize.</title>
+<meta name="description" content="hize — 광고 연출 감독 박진용의 프로덕션. Film / Advertising / Production.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400&family=Noto+Sans+KR:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="../index.html" aria-label="hize 홈">hize<span class="dot"></span></a>
+    <nav class="menu mono" aria-label="주요 메뉴">
+      <a href="../index.html" data-nav="home">Home</a>
+      <a href="../about/index.html" data-nav="about" aria-current="page">About</a>
+      <a href="../work/index.html" data-nav="work">Work</a>
+      <a href="../contact/index.html" data-nav="contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="page" id="about">
+    <div class="wrap">
+      <div class="page-head">
+        <h1 class="page-title">About</h1>
+        <span class="mono mute">Director JY</span>
+      </div>
+      <div class="about">
+        <div class="statement">
+          <p>hize는 광고 연출 감독 박진용이 이끄는 프로덕션입니다.</p>
+          <p>브랜드가 하고 싶은 이야기를 감각적인 화면과 진짜 같은 순간으로 옮깁니다. 기획 단계부터 촬영과 후반 작업까지 감독이 직접 책임지는 구조로 일합니다.</p>
+          <div class="who mono mute">박진용 — Director</div>
+        </div>
+        <div class="facts">
+          <div>
+            <div class="mono mute">Keywords</div>
+            <div class="keys"><span>Stylish</span><span>Authentic</span><span>Visual</span><span>Playful</span></div>
+          </div>
+          <div>
+            <div class="mono mute">Awards</div>
+            <ul class="list">
+              <li><span>PR어워즈 금상</span><span>2025</span></li>
+              <li><span>공공브랜드 대상 최우수상</span><span>2024</span></li>
+            </ul>
+          </div>
+          <div>
+            <div class="mono mute">Clients</div>
+            <ul class="list">
+              <li><span>LG U+</span><span>Telecom</span></li>
+              <li><span>삼성</span><span>Electronics</span></li>
+              <li><span>CJENM</span><span>Media</span></li>
+              <li><span>허쉬</span><span>F&amp;B</span></li>
+              <li><span>식품의약품안전처</span><span>Public</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</main>
+
+<footer>
+  <div class="wrap foot mono mute">
+    <span>© hize.</span>
+    <span>Film / Advertising / Production</span>
+  </div>
+</footer>
+
+<div class="player" id="player" hidden role="dialog" aria-modal="true" aria-label="영상 플레이어">
+  <button class="x mono" type="button" id="player-x">Close ✕</button>
+  <div class="screen" id="screen"></div>
+  <div class="bar2"><span class="mono mute" id="player-title"></span><a class="mono textlink" id="player-link" href="#" target="_blank" rel="noopener">Open ↗</a></div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

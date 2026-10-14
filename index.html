@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>hize.</title>
+<meta name="description" content="hize — 광고 연출 감독 박진용의 프로덕션. Film / Advertising / Production.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400&family=Noto+Sans+KR:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="cover" id="cover" role="dialog" aria-label="hize 표지">
+  <div class="cv-row mono">
+    <span>Film / Advertising / Production</span>
+    <span class="cv-hide-sm">Directed by JY</span>
+  </div>
+  <div class="cv-center">
+    <div class="cv-mark" aria-label="hize">hize<span class="dot"></span></div>
+  </div>
+  <div class="cv-row bottom mono">
+    <span class="tc"><i aria-hidden="true"></i>REC <span class="tc-val">00:00:00:00</span></span>
+    <button class="enter-btn" type="button" id="enter">Enter <span aria-hidden="true">→</span></button>
+  </div>
+</div>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="hize 홈">hize<span class="dot"></span></a>
+    <nav class="menu mono" aria-label="주요 메뉴">
+      <a href="index.html" data-nav="home" aria-current="page">Home</a>
+      <a href="about/index.html" data-nav="about">About</a>
+      <a href="work/index.html" data-nav="work">Work</a>
+      <a href="contact/index.html" data-nav="contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="page" id="home">
+    <!-- 쇼릴: data-video 에 유튜브 또는 비메오 주소를 넣으면 배경으로 무음 재생됩니다 -->
+    <section class="reel" id="reel" data-video="" aria-label="쇼릴">
+      <div class="ph mono">Showreel — [유튜브 · 비메오 링크]</div>
+      <div class="shade"></div>
+      <div class="reel-ui">
+        <div class="reel-mark" aria-hidden="true">hize<span class="dot"></span></div>
+        <div class="reel-side">
+          <span class="tc mono"><i aria-hidden="true"></i>REC <span class="tc-val">00:00:00:00</span></span>
+          <button class="btn" type="button" id="reel-play">Play reel <span aria-hidden="true">▶</span></button>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="intro">
+        <p>스타일리시하고 진정성 있는 광고를 연출합니다.</p>
+        <span class="mono mute">Selected</span>
+      </div>
+      <div class="stack">
+        <article class="item" data-video="">
+          <div class="frame scope"><span class="mono ph">[대표 작업 영상]</span><span class="play mono"><span>Play ▶</span></span></div>
+          <div class="meta"><span class="t">LG U+</span><span class="mono mute">[작업명] · Work</span></div>
+        </article>
+        <article class="item" data-video="">
+          <div class="frame hd"><span class="mono ph">[작업 영상]</span><span class="play mono"><span>Play ▶</span></span></div>
+          <div class="meta"><span class="t">삼성</span><span class="mono mute">[작업명] · Work</span></div>
+        </article>
+        <article class="item" data-video="">
+          <div class="frame hd"><span class="mono ph">[작업 영상]</span><span class="play mono"><span>Play ▶</span></span></div>
+          <div class="meta"><span class="t">CJENM</span><span class="mono mute">[작업명] · Work</span></div>
+        </article>
+        <article class="item" data-video="">
+          <div class="frame scope"><span class="mono ph">[예고편 영상]</span><span class="play mono"><span>Play ▶</span></span></div>
+          <div class="meta"><span class="t">고백은 NG</span><span class="mono mute">AI 숏폼 드라마 · Contents</span></div>
+        </article>
+      </div>
+      <div class="more"><a class="textlink mono" href="work/index.html">All work <span aria-hidden="true">→</span></a></div>
+    </div>
+  </div>
+
+  
+</main>
+
+<footer>
+  <div class="wrap foot mono mute">
+    <span>© hize.</span>
+    <span>Film / Advertising / Production</span>
+  </div>
+</footer>
+
+<div class="player" id="player" hidden role="dialog" aria-modal="true" aria-label="영상 플레이어">
+  <button class="x mono" type="button" id="player-x">Close ✕</button>
+  <div class="screen" id="screen"></div>
+  <div class="bar2"><span class="mono mute" id="player-title"></span><a class="mono textlink" id="player-link" href="#" target="_blank" rel="noopener">Open ↗</a></div>
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
