@@ -148,6 +148,12 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:va
 .enter-btn:hover{background:var(--ink);color:var(--point)}
 .cover .dot,.cover .tc i{background:var(--ink)}
 .cover :focus-visible{outline-color:var(--ink)}
+.cover{cursor:pointer}
+.cover:focus-visible{outline:none}
+.enter-hint{display:inline-flex;gap:10px;align-items:center;animation:hint 2.4s ease-in-out 1.6s infinite}
+@keyframes hint{50%{opacity:.35}}
+@media (hover:none){.enter-hint{font-size:0}.enter-hint::before{content:"Tap to enter";font-size:11px}.enter-hint span{font-size:11px}}
+@media (prefers-reduced-motion:reduce){.enter-hint{animation:none}}
 @media (max-width:560px){.cv-hide-sm{display:none}}
 @media (prefers-reduced-motion:reduce){.cover{transition:none}.cv-mark .dot{animation:none}}
 

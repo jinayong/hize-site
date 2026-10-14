@@ -194,7 +194,8 @@
     };
     var openCover = function(){ closed = false; cover.hidden = false; cover.classList.remove('out'); };
     if (skip) cover.hidden = true;
-    document.getElementById('enter').addEventListener('click', closeCover);
+    cover.addEventListener('click', closeCover);
+    if (!skip) { try { cover.focus({ preventScroll: true }); } catch (e) {} }
     cover.addEventListener('wheel', function(e){ if (e.deltaY > 10) closeCover(); }, { passive: true });
     var ty = null;
     cover.addEventListener('touchstart', function(e){ ty = e.touches[0].clientY; }, { passive: true });
