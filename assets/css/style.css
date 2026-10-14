@@ -136,7 +136,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:va
 .copy:hover{color:var(--paper);border-color:var(--mute)}
 
 /* COVER */
-.cover{position:fixed;inset:0;z-index:50;background:var(--ink);color:var(--paper);display:grid;grid-template-rows:auto 1fr auto;padding:calc(env(safe-area-inset-top,0px) + var(--g)) var(--g) calc(env(safe-area-inset-bottom,0px) + var(--g));transition:opacity .7s ease,visibility .7s}
+.cover{position:fixed;inset:0;z-index:50;background:var(--point);color:var(--ink);display:grid;grid-template-rows:auto 1fr auto;padding:calc(env(safe-area-inset-top,0px) + var(--g)) var(--g) calc(env(safe-area-inset-bottom,0px) + var(--g));transition:opacity .7s ease,visibility .7s}
 .cover.out{opacity:0;visibility:hidden}
 .cover[hidden]{display:none!important}
 .cv-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
@@ -144,8 +144,10 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:va
 .cv-center{display:flex;align-items:center;justify-content:center;min-height:0}
 .cv-mark{font-family:var(--display);font-weight:500;font-size:clamp(96px,24vw,360px);letter-spacing:-.07em;line-height:.82;display:flex;align-items:baseline;margin-right:-.04em}
 .cv-mark .dot{animation:rec 1.2s steps(1) .4s 3}
-.enter-btn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);background:none;border:1px solid var(--line);padding:12px 18px;min-height:44px;cursor:pointer;display:inline-flex;gap:10px;align-items:center;transition:border-color .2s,background .2s,color .2s}
-.enter-btn:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.enter-btn{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);background:none;border:1px solid var(--ink);padding:12px 18px;min-height:44px;cursor:pointer;display:inline-flex;gap:10px;align-items:center;transition:background .2s,color .2s}
+.enter-btn:hover{background:var(--ink);color:var(--point)}
+.cover .dot,.cover .tc i{background:var(--ink)}
+.cover :focus-visible{outline-color:var(--ink)}
 @media (max-width:560px){.cv-hide-sm{display:none}}
 @media (prefers-reduced-motion:reduce){.cover{transition:none}.cv-mark .dot{animation:none}}
 
