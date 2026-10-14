@@ -88,7 +88,7 @@
       return { kind: get(r, iK).toLowerCase(), name: get(r, iN), title: get(r, iT), video: get(r, iV), main: /^y/i.test(get(r, iM)), cat: get(r, iC), thumb: get(r, iTh) };
     });
     var com = items.filter(function(x){ return x.kind === 'commercial'; });
-    var con = items.filter(function(x){ return x.kind === 'contents' || x.kind === 'content'; });
+    var con = items.filter(function(x){ return x.kind === 'contents' || x.kind === 'content' || x.kind === 'originals' || x.kind === 'original'; });
     var first = function(k){ return items.filter(function(x){ return x.kind === k; })[0]; };
     var setting = function(k){ var x = first(k); return x ? (x.video || x.title || x.name) : ''; };
 
@@ -104,7 +104,7 @@
     var ta = function(x){ return x.thumb ? ' data-thumb="' + esc(/[\/:]/.test(x.thumb) ? x.thumb : 'assets/img/work/' + x.thumb) + '"' : ''; };
     if (full && stack && feat.length) {
       stack.innerHTML = feat.map(function(x, i){
-        var where = con.indexOf(x) >= 0 ? 'Contents' : 'Work';
+        var where = con.indexOf(x) >= 0 ? 'Originals' : 'Work';
         return cardHtml(x, 'item');
       }).join('');
     }
@@ -134,7 +134,7 @@
     document.querySelectorAll('.folder').forEach(function(f){
       var n = f.querySelector('.f-n'); if (!n || !full) return;
       var key = f.getAttribute('data-tab') || f.getAttribute('href') || '';
-      n.textContent = two(/contents/.test(key) ? con.length : com.length);
+      n.textContent = two(/contents|originals/.test(key) ? con.length : com.length);
     });
     var setText = function(id, v){
       var el = document.getElementById(id); if (!el || !v || /^\[|0000/.test(v)) return;
