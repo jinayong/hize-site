@@ -12,6 +12,7 @@
     if (v.kind === 'yt') {
       var q = 'autoplay=1&playsinline=1&rel=0&modestbranding=1';
       if (bg) q += '&mute=1&loop=1&controls=0&playlist=' + v.id;
+      else q += '&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
       return 'https://www.youtube-nocookie.com/embed/' + v.id + '?' + q;
     }
     var p = 'autoplay=1&dnt=1' + (v.h ? '&h=' + v.h : '');
@@ -42,12 +43,24 @@
     f.allowFullscreen = true;
     f.title = title || 'video';
     screen.appendChild(f);
+    if (v.kind === 'yt') f.addEventListener('load', function(){
+      try { f.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), '*'); } catch (e) {}
+    });
+    screen.dataset.url = v.url;
     document.getElementById('player-title').textContent = title || '';
     document.getElementById('player-link').href = v.url;
     player.classList.toggle('v', !!vertical);
     player.hidden = false;
     document.getElementById('player-x').focus();
   }
+  // 영상 주인이 외부 사이트 재생을 막아둔 경우: 빈 화면 대신 유튜브 바로가기 안내
+  window.addEventListener('message', function(e){
+    if (!/youtube(-nocookie)?\.com$/.test((e.origin || '').replace(/^https?:\/\//, ''))) return;
+    var d; try { d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch (err) { return; }
+    if (!d || d.event !== 'onError' || player.hidden) return;
+    var url = screen.dataset.url || '#';
+    screen.innerHTML = '<div class="blocked"><p>이 영상은 YouTube에서 재생할 수 있어요.</p><a class="btn" href="' + url + '" target="_blank" rel="noopener">YouTube에서 보기 ↗</a></div>';
+  });
   function closePlayer(){ player.hidden = true; screen.innerHTML = ''; if (lastFocus) lastFocus.focus(); }
   document.getElementById('player-x').addEventListener('click', closePlayer);
   player.addEventListener('click', function(e){ if (e.target === player) closePlayer(); });
