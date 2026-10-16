@@ -56,7 +56,7 @@
     cred.innerHTML = '';
     if (src && src.getAttribute('data-client')) {
       [['Client', src.getAttribute('data-client')], ['Agency', src.getAttribute('data-agency')], ['Production', 'hize'],
-       ['Director', 'Park Jinyong'], ['Model', src.getAttribute('data-model')], ['Awards', src.getAttribute('data-awards')]].forEach(function(r){
+       ['Director', 'Park jinyong'], ['Model', src.getAttribute('data-model')], ['Awards', src.getAttribute('data-awards')]].forEach(function(r){
         if (!r[1]) return;
         var d = document.createElement('div'), k = document.createElement('span'), v = document.createElement('span');
         k.className = 'mono mute'; k.textContent = r[0]; v.textContent = r[1].split('|').join(' · ');
