@@ -143,7 +143,7 @@
     var cardHtml = function(x, cls){
       var m = meta[(x.thumb || '').split('/').pop()] || meta[x.video] || { a: '', href: '' };
       var tt = m.href ? '<a class="t" href="' + esc(m.href) + '">' + esc(x.name) + '</a>' : '<span class="t">' + esc(x.name) + '</span>';
-      return '<article class="' + cls + '"' + m.a + ' data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd">' + (m.aw ? '<div class="chips"><span class="chip aw mono">Award</span></div>' : '') + '<span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
+      return '<article class="' + cls + '"' + m.a + ' data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd">' + '<span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
         '<div class="card-meta">' + tt + '<span class="mono mute">' + esc(x.title) + '</span></div></article>';
     };
     var ta = function(x){ return x.thumb ? ' data-thumb="' + esc(/[\/:]/.test(x.thumb) ? x.thumb : 'assets/img/work/' + x.thumb) + '"' : ''; };
