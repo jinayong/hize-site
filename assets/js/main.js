@@ -59,7 +59,7 @@
        ['Director', 'Park jinyong'], ['Model', src.getAttribute('data-model')], ['Awards', src.getAttribute('data-awards')]].forEach(function(r){
         if (!r[1]) return;
         var d = document.createElement('div'), k = document.createElement('span'), v = document.createElement('span');
-        k.className = 'mono mute'; k.textContent = r[0]; v.textContent = r[1].split('|').join(' · ');
+        k.className = 'mono mute'; k.textContent = r[0]; v.textContent = r[1].split('|').join(' · '); if (r[0] === 'Awards') v.className = 'aw';
         d.appendChild(k); d.appendChild(v); cred.appendChild(d);
       });
     }
@@ -136,14 +136,14 @@
     document.querySelectorAll('[data-slug]').forEach(function(el){
       var a = '';
       ['data-slug', 'data-client', 'data-agency', 'data-model', 'data-awards'].forEach(function(n){ a += ' ' + n + '="' + esc(el.getAttribute(n)) + '"'; });
-      var t = el.querySelector('a.t'), rec = { a: a, href: t ? t.getAttribute('href') : '' };
+      var t = el.querySelector('a.t'), rec = { a: a, href: t ? t.getAttribute('href') : '', aw: !!el.getAttribute('data-awards') };
       var th = (el.getAttribute('data-thumb') || '').split('/').pop(), v = el.getAttribute('data-video');
       if (th) meta[th] = rec; if (v) meta[v] = rec;
     });
     var cardHtml = function(x, cls){
       var m = meta[(x.thumb || '').split('/').pop()] || meta[x.video] || { a: '', href: '' };
       var tt = m.href ? '<a class="t" href="' + esc(m.href) + '">' + esc(x.name) + '</a>' : '<span class="t">' + esc(x.name) + '</span>';
-      return '<article class="' + cls + '"' + m.a + ' data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd"><span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
+      return '<article class="' + cls + '"' + m.a + ' data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd">' + (m.aw ? '<div class="chips"><span class="chip aw mono">Award</span></div>' : '') + '<span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
         '<div class="card-meta">' + tt + '<span class="mono mute">' + esc(x.title) + '</span></div></article>';
     };
     var ta = function(x){ return x.thumb ? ' data-thumb="' + esc(/[\/:]/.test(x.thumb) ? x.thumb : 'assets/img/work/' + x.thumb) + '"' : ''; };

@@ -239,6 +239,12 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:va
 .player .pcred{width:min(100%,calc((100svh - 240px) * 16 / 9));display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline;border-top:1px solid var(--line);padding-top:12px}
 .player.v .pcred{width:min(100%,calc((100svh - 240px) * 9 / 16))}
 .player .pcred[hidden]{display:none}
+.player .pcred .aw::before{content:"";display:inline-block;width:7px;height:7px;background:var(--point);margin-right:8px;vertical-align:1px}
+#player-x:focus,#player-x:focus-visible{outline:none}
+.frame{position:relative}
+.chips{position:absolute;left:10px;top:10px;display:flex;gap:6px;z-index:2;pointer-events:none}
+.chip{font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 8px;background:rgba(8,8,8,.78);color:var(--paper);display:inline-flex;align-items:center;gap:6px;line-height:1}
+.chip.aw::before{content:"";width:6px;height:6px;background:var(--point)}
 body:has(#player:not([hidden])) .cur{display:none}
 .player .pcred div{display:flex;gap:10px;align-items:baseline;min-width:0}
 .player .pcred div span:last-child{font-size:13px}
