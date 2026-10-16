@@ -289,7 +289,7 @@
         ul.innerHTML = '';
         grid.querySelectorAll('.card').forEach(function(card, i){
           var li = document.createElement('li'), t = card.querySelector('.t'), w = card.querySelector('.card-meta .mono');
-          li.innerHTML = '<span class="n mono">' + (i < 9 ? '0' : '') + (i + 1) + '</span><span class="c"></span><span class="w"></span><span class="y mono mute">' + (card.getAttribute('data-video') ? 'Play' : '—') + '</span>';
+          li.innerHTML = '<span class="n mono">' + (i < 9 ? '0' : '') + (i + 1) + '</span><span class="c"></span><span class="w"></span><span class="y mono mute">' + (card.classList.contains('is-private') ? 'Private' : card.getAttribute('data-video') ? 'Play' : '—') + '</span>';
           li.querySelector('.c').textContent = t ? t.textContent : '';
           li.querySelector('.w').textContent = w ? w.textContent : '';
           li.dataset.thumb = card.getAttribute('data-thumb') || '';
