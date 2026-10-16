@@ -131,9 +131,20 @@
 
     var stack = document.querySelector('.stack');
     var feat = com.filter(function(x){ return x.main; }).concat(con.filter(function(x){ return x.main; })).slice(0, 4);
+    // 빌드 때 넣어둔 크레딧·작품 페이지 링크를 시트로 다시 그린 카드에도 그대로 옮깁니다
+    var meta = {};
+    document.querySelectorAll('[data-slug]').forEach(function(el){
+      var a = '';
+      ['data-slug', 'data-client', 'data-agency', 'data-model', 'data-awards'].forEach(function(n){ a += ' ' + n + '="' + esc(el.getAttribute(n)) + '"'; });
+      var t = el.querySelector('a.t'), rec = { a: a, href: t ? t.getAttribute('href') : '' };
+      var th = (el.getAttribute('data-thumb') || '').split('/').pop(), v = el.getAttribute('data-video');
+      if (th) meta[th] = rec; if (v) meta[v] = rec;
+    });
     var cardHtml = function(x, cls){
-      return '<article class="' + cls + '" data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd"><span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
-        '<div class="card-meta"><span class="t">' + esc(x.name) + '</span><span class="mono mute">' + esc(x.title) + '</span></div></article>';
+      var m = meta[(x.thumb || '').split('/').pop()] || meta[x.video] || { a: '', href: '' };
+      var tt = m.href ? '<a class="t" href="' + esc(m.href) + '">' + esc(x.name) + '</a>' : '<span class="t">' + esc(x.name) + '</span>';
+      return '<article class="' + cls + '"' + m.a + ' data-video="' + esc(x.video) + '"' + ta(x) + '><div class="frame hd"><span class="mono ph">' + esc(x.name) + '</span><span class="play mono"><span>Play ▶</span></span></div>' +
+        '<div class="card-meta">' + tt + '<span class="mono mute">' + esc(x.title) + '</span></div></article>';
     };
     var ta = function(x){ return x.thumb ? ' data-thumb="' + esc(/[\/:]/.test(x.thumb) ? x.thumb : 'assets/img/work/' + x.thumb) + '"' : ''; };
     if (full && stack && feat.length) {
