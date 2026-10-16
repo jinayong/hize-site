@@ -170,7 +170,7 @@
       if (el.tagName !== 'BUTTON') { el.tabIndex = 0; el.setAttribute('role','button'); }
       var title = (el.querySelector('.t, .client') || {}).textContent;
       var go = function(){ openPlayer(url, title, el.hasAttribute('data-vertical')); };
-      el.addEventListener('click', go);
+      el.addEventListener('click', function(ev){ if (ev.target.closest && ev.target.closest('a[href]')) return; go(); });
       el.addEventListener('keydown', function(e){ if (el.tagName !== 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); go(); } });
     });
   }
