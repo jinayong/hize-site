@@ -33,7 +33,8 @@
 
   /* player */
   var player = document.getElementById('player'), screen = document.getElementById('screen'), lastFocus = null;
-  function openPlayer(url, title, vertical){
+  var pushedUrl = false;
+  function openPlayer(url, title, vertical, src){
     var v = parse(url); if (!v) return;
     lastFocus = document.activeElement;
     screen.innerHTML = '';
@@ -49,6 +50,24 @@
     screen.dataset.url = v.url;
     document.getElementById('player-title').textContent = title || '';
     document.getElementById('player-link').href = v.url;
+    // credits under the video + a shareable URL for this work
+    var cred = document.getElementById('player-cred');
+    if (!cred) { cred = document.createElement('div'); cred.id = 'player-cred'; cred.className = 'pcred'; player.appendChild(cred); }
+    cred.innerHTML = '';
+    if (src && src.getAttribute('data-client')) {
+      [['Client', src.getAttribute('data-client')], ['Agency', src.getAttribute('data-agency')], ['Model', src.getAttribute('data-model')],
+       ['Production', 'hize'], ['Awards', src.getAttribute('data-awards')]].forEach(function(r){
+        if (!r[1]) return;
+        var d = document.createElement('div'), k = document.createElement('span'), v = document.createElement('span');
+        k.className = 'mono mute'; k.textContent = r[0]; v.textContent = r[1].split('|').join(' · ');
+        d.appendChild(k); d.appendChild(v); cred.appendChild(d);
+      });
+    }
+    cred.hidden = !cred.children.length;
+    var slug = src && src.getAttribute('data-slug');
+    if (slug && history.pushState && document.querySelector('link[href*="assets/css/style.css"]')) {
+      try { history.pushState({ hizePlayer: 1 }, '', new URL(ASSET_BASE + 'work/' + slug + '/', location.href).pathname); pushedUrl = true; } catch (e) {}
+    }
     player.classList.toggle('v', !!vertical);
     player.hidden = false;
     document.getElementById('player-x').focus();
@@ -61,7 +80,9 @@
     var url = screen.dataset.url || '#';
     screen.innerHTML = '<div class="blocked"><p>이 영상은 YouTube에서 재생할 수 있어요.</p><a class="btn" href="' + url + '" target="_blank" rel="noopener">YouTube에서 보기 ↗</a></div>';
   });
-  function closePlayer(){ player.hidden = true; screen.innerHTML = ''; if (lastFocus) lastFocus.focus(); }
+  function hidePlayer(){ player.hidden = true; screen.innerHTML = ''; if (lastFocus) lastFocus.focus(); }
+  function closePlayer(){ if (pushedUrl) { pushedUrl = false; history.back(); } hidePlayer(); }
+  window.addEventListener('popstate', function(){ if (!player.hidden) { pushedUrl = false; hidePlayer(); } });
   document.getElementById('player-x').addEventListener('click', closePlayer);
   player.addEventListener('click', function(e){ if (e.target === player) closePlayer(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !player.hidden) closePlayer(); });
@@ -169,7 +190,7 @@
       if (!parse(url)) return;
       if (el.tagName !== 'BUTTON') { el.tabIndex = 0; el.setAttribute('role','button'); }
       var title = (el.querySelector('.t, .client') || {}).textContent;
-      var go = function(){ openPlayer(url, title, el.hasAttribute('data-vertical')); };
+      var go = function(){ openPlayer(url, title, el.hasAttribute('data-vertical'), el); };
       el.addEventListener('click', function(ev){ if (ev.target.closest && ev.target.closest('a[href]')) return; go(); });
       el.addEventListener('keydown', function(e){ if (el.tagName !== 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); go(); } });
     });
