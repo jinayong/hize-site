@@ -247,7 +247,7 @@
       var n = f.querySelector('.f-n'); if (!n || !full) return;
       var key = f.getAttribute('data-tab') || f.getAttribute('href') || '';
       var vis = Array.prototype.filter.call(document.querySelectorAll('.wgrid article'), function(a){ return !isHidden(a); }).length;
-      n.textContent = two(/contents|originals/.test(key) ? con.length : (vis || com.length));
+      n.textContent = two(/contents|originals/.test(key) ? con.length : (vis || +n.getAttribute('data-pub') || com.length));
     });
     var setText = function(id, v){
       var el = document.getElementById(id); if (!el || !v || /^\[|0000/.test(v)) return;
