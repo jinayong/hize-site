@@ -215,6 +215,13 @@
     }
     var list = document.querySelector('.wgrid');
     if (full && list && com.length) {
+      // 순서는 사이트에 정해둔 순서를 따르고, 시트에만 있는 새 작품은 뒤에 붙입니다
+      var orderOf = {};
+      Array.prototype.forEach.call(list.querySelectorAll('[data-thumb]'), function(el, k){ orderOf[(el.getAttribute('data-thumb') || '').split('/').pop()] = k; });
+      com = com.map(function(x, k){ return { x: x, k: k }; }).sort(function(a, b){
+        var oa = orderOf[(a.x.thumb || '').split('/').pop()], ob = orderOf[(b.x.thumb || '').split('/').pop()];
+        oa = oa === undefined ? 1e4 + a.k : oa; ob = ob === undefined ? 1e4 + b.k : ob; return oa - ob;
+      }).map(function(o){ return o.x; });
       list.innerHTML = com.map(function(x){ return cardHtml(x, 'card'); }).join('');
     }
     var slist = document.querySelector('.series-list');
