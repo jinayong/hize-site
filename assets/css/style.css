@@ -240,9 +240,10 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:va
 .player.v .pcred{width:min(100%,calc((100svh - 240px) * 9 / 16))}
 .player .pcred[hidden]{display:none}
 .player .pcred .awrow{flex-basis:100%;align-items:flex-start}
-.player .pcred .aws{display:flex;flex-direction:column;gap:4px}
-.player .pcred .aw{display:block}
-.player .pcred .aw::before{content:"";display:inline-block;width:7px;height:7px;background:var(--point);margin-right:8px;vertical-align:1px}
+.player .pcred .aws{display:grid;grid-template-columns:7px auto 1fr;column-gap:10px;row-gap:4px;align-items:baseline}
+.player .pcred .awd{width:7px;height:7px;background:var(--point);display:block;align-self:center}
+.player .pcred .awd.off{visibility:hidden}
+.player .pcred .awy{font-size:12px;letter-spacing:.08em}
 #player-x:focus,#player-x:focus-visible{outline:none}
 .pnav{position:fixed;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;width:72px;padding:24px 0;background:none;border:0;color:var(--paper);cursor:pointer;opacity:0;transition:opacity .35s}
 .pnav[hidden]{display:none}

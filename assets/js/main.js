@@ -91,7 +91,14 @@
         k.className = 'mono mute'; k.textContent = r[0];
         if (r[0] === 'Awards') {
           d.className = 'awrow'; v.className = 'aws';
-          r[1].split('|').forEach(function(a){ var i = document.createElement('span'); i.className = 'aw'; i.textContent = a; v.appendChild(i); });
+          // ■ 2024  상 이름 / (같은 해면 연도 생략) 상 이름 — 점은 맨 앞에 하나만
+          var prevY = '';
+          r[1].split('|').forEach(function(a, n){
+            var m = a.match(/^(\d{4})\s+(.*)$/), y = m ? m[1] : '', t = m ? m[2] : a;
+            var dot = document.createElement('i'), yy = document.createElement('span'), tt = document.createElement('span');
+            dot.className = n ? 'awd off' : 'awd'; yy.className = 'awy mono'; yy.textContent = y !== prevY ? y : ''; tt.textContent = t;
+            v.appendChild(dot); v.appendChild(yy); v.appendChild(tt); prevY = y;
+          });
         } else v.textContent = r[1];
         d.appendChild(k); d.appendChild(v); cred.appendChild(d);
       });
