@@ -19,6 +19,10 @@
     if (bg) p += '&background=1';
     return 'https://player.vimeo.com/video/' + v.id + '?' + p;
   }
+  // 프로듀싱작은 공개 목록에서 숨김. 주소 뒤에 ?all 을 붙이면 본인만 전체를 볼 수 있어요.
+  var SHOW_ALL = /[?&]all\b/.test(location.search);
+  if (SHOW_ALL) document.documentElement.classList.add('show-all');
+  function isHidden(el){ return !SHOW_ALL && el.getAttribute('data-role') === 'producer'; }
   var ASSET_BASE = (function(){
     var l = document.querySelector('link[href*="assets/css/style.css"]');
     return l ? l.getAttribute('href').replace('assets/css/style.css', '') : '';
@@ -38,7 +42,7 @@
   function siblings(){
     if (!curSrc || !curSrc.isConnected) return [];
     var box = curSrc.closest('.wgrid, .stack, .series-list') || document;
-    return Array.prototype.filter.call(box.querySelectorAll('[data-video]'), function(el){ return el.id !== 'reel' && !!parse(el.getAttribute('data-video')); });
+    return Array.prototype.filter.call(box.querySelectorAll('[data-video]'), function(el){ return el.id !== 'reel' && !isHidden(el) && !!parse(el.getAttribute('data-video')); });
   }
   function neighbor(d){
     var l = siblings(), i = l.indexOf(curSrc);
@@ -235,7 +239,8 @@
     document.querySelectorAll('.folder').forEach(function(f){
       var n = f.querySelector('.f-n'); if (!n || !full) return;
       var key = f.getAttribute('data-tab') || f.getAttribute('href') || '';
-      n.textContent = two(/contents|originals/.test(key) ? con.length : com.length);
+      var vis = Array.prototype.filter.call(document.querySelectorAll('.wgrid article'), function(a){ return !isHidden(a); }).length;
+      n.textContent = two(/contents|originals/.test(key) ? con.length : (vis || com.length));
     });
     var setText = function(id, v){
       var el = document.getElementById(id); if (!el || !v || /^\[|0000/.test(v)) return;
@@ -375,7 +380,8 @@
       var ul = document.createElement('ul'); ul.className = 'windex';
       var build = function(){
         ul.innerHTML = '';
-        grid.querySelectorAll('.card').forEach(function(card, i){
+        var cards = Array.prototype.filter.call(grid.querySelectorAll('.card'), function(c){ return !isHidden(c); });
+        cards.forEach(function(card, i){
           var li = document.createElement('li'), t = card.querySelector('.t'), w = card.querySelector('.card-meta .mono');
           li.innerHTML = '<span class="n mono">' + (i < 9 ? '0' : '') + (i + 1) + '</span><span class="c"></span><span class="w"></span><span class="y mono mute">' + (card.getAttribute('data-video') ? 'Play' : '—') + '</span>';
           li.querySelector('.c').textContent = t ? t.textContent : '';

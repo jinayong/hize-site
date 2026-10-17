@@ -247,6 +247,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:va
 #player-x:focus,#player-x:focus-visible{outline:none}
 .pnav{position:fixed;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;width:72px;padding:24px 0;background:none;border:0;color:var(--paper);cursor:pointer;opacity:0;transition:opacity .35s}
 .pnav[hidden]{display:none}
+html:not(.show-all) [data-role="producer"]{display:none!important}
 .pnav.prev{left:clamp(4px,1.4vw,24px)}
 .pnav.next{right:clamp(4px,1.4vw,24px)}
 .pnav svg{width:18px;height:36px}
