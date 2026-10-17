@@ -33,10 +33,39 @@
 
   /* player */
   var player = document.getElementById('player'), screen = document.getElementById('screen'), lastFocus = null;
-  var pushedUrl = false;
+  var pushedUrl = false, curSrc = null, navIdle = null;
+  // 팝업 안에서 이전/다음 작품으로 넘기기: 같은 목록(Work 그리드, Latest, 시리즈)의 순서를 따릅니다
+  function siblings(){
+    if (!curSrc || !curSrc.isConnected) return [];
+    var box = curSrc.closest('.wgrid, .stack, .series-list') || document;
+    return Array.prototype.filter.call(box.querySelectorAll('[data-video]'), function(el){ return el.id !== 'reel' && !!parse(el.getAttribute('data-video')); });
+  }
+  function neighbor(d){
+    var l = siblings(), i = l.indexOf(curSrc);
+    if (i < 0 || l.length < 2) return null;
+    return l[(i + d + l.length) % l.length];
+  }
+  function titleOf(el){ return ((el.querySelector('.t, .client') || {}).textContent || '').trim(); }
+  function step(d){
+    var n = neighbor(d); if (!n) return;
+    openPlayer(n.getAttribute('data-video'), titleOf(n), n.hasAttribute('data-vertical'), n);
+  }
+  var navPrev = document.createElement('button'), navNext = document.createElement('button');
+  [[navPrev, 'prev', -1, '이전 작품'], [navNext, 'next', 1, '다음 작품']].forEach(function(c){
+    c[0].type = 'button'; c[0].className = 'pnav ' + c[1]; c[0].setAttribute('aria-label', c[3]);
+    c[0].innerHTML = '<svg viewBox="0 0 24 48" aria-hidden="true"><path d="' + (c[2] < 0 ? 'M18 4 6 24l12 20' : 'M6 4l12 20L6 44') + '" fill="none" stroke="currentColor" stroke-width="1.2"/></svg><span class="mono"></span>';
+    c[0].addEventListener('click', function(e){ e.stopPropagation(); step(c[2]); });
+  });
+  function updateNav(){
+    var p = neighbor(-1), n = neighbor(1);
+    navPrev.hidden = !p; navNext.hidden = !n;
+    if (p) navPrev.querySelector('span').textContent = titleOf(p);
+    if (n) navNext.querySelector('span').textContent = titleOf(n);
+  }
   function openPlayer(url, title, vertical, src){
     var v = parse(url); if (!v) return;
-    lastFocus = document.activeElement;
+    if (player.hidden) lastFocus = document.activeElement;
+    curSrc = src || null;
     screen.innerHTML = '';
     var f = document.createElement('iframe');
     f.src = embed(v, false);
@@ -66,9 +95,14 @@
     cred.hidden = !cred.children.length;
     var slug = src && src.getAttribute('data-slug');
     if (slug && history.pushState && document.querySelector('link[href*="assets/css/style.css"]')) {
-      try { history.pushState({ hizePlayer: 1 }, '', new URL(ASSET_BASE + 'work/' + slug + '/', location.href).pathname); pushedUrl = true; } catch (e) {}
+      try {
+        var wurl = new URL(ASSET_BASE + 'work/' + slug + '/', location.href).pathname;
+        if (pushedUrl) history.replaceState({ hizePlayer: 1 }, '', wurl); else history.pushState({ hizePlayer: 1 }, '', wurl);
+        pushedUrl = true;
+      } catch (e) {}
     }
     player.classList.toggle('v', !!vertical);
+    updateNav();
     player.hidden = false;
     document.getElementById('player-x').focus();
   }
@@ -80,9 +114,18 @@
     var url = screen.dataset.url || '#';
     screen.innerHTML = '<div class="blocked"><p>이 영상은 YouTube에서 재생할 수 있어요.</p><a class="btn" href="' + url + '" target="_blank" rel="noopener">YouTube에서 보기 ↗</a></div>';
   });
-  function hidePlayer(){ player.hidden = true; screen.innerHTML = ''; if (lastFocus) lastFocus.focus(); }
+  function hidePlayer(){ curSrc = null; player.hidden = true; screen.innerHTML = ''; if (lastFocus) lastFocus.focus(); }
   function closePlayer(){ if (pushedUrl) { pushedUrl = false; history.back(); } hidePlayer(); }
   window.addEventListener('popstate', function(){ if (!player.hidden) { pushedUrl = false; hidePlayer(); } });
+  player.appendChild(navPrev); player.appendChild(navNext);
+  player.addEventListener('mousemove', function(){
+    player.classList.add('ui'); clearTimeout(navIdle);
+    navIdle = setTimeout(function(){ player.classList.remove('ui'); }, 2200);
+  });
+  document.addEventListener('keydown', function(e){
+    if (player.hidden) return;
+    if (e.key === 'ArrowRight') step(1); else if (e.key === 'ArrowLeft') step(-1);
+  });
   document.getElementById('player-x').addEventListener('click', closePlayer);
   player.addEventListener('click', function(e){ if (e.target === player) closePlayer(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !player.hidden) closePlayer(); });
