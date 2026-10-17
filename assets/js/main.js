@@ -84,8 +84,10 @@
     if (!cred) { cred = document.createElement('div'); cred.id = 'player-cred'; cred.className = 'pcred'; player.appendChild(cred); }
     cred.innerHTML = '';
     if (src && src.getAttribute('data-client')) {
-      [['Client', src.getAttribute('data-client')], ['Agency', src.getAttribute('data-agency')], ['Production', 'hize'],
-       ['Director', 'Park jinyong'], ['Model', src.getAttribute('data-model')], ['Awards', src.getAttribute('data-awards')]].forEach(function(r){
+      (src.getAttribute('data-role') === 'producer'
+        ? [['Client', src.getAttribute('data-client')], ['Agency', src.getAttribute('data-agency')], ['Producer', 'Park jinyong']]
+        : [['Client', src.getAttribute('data-client')], ['Agency', src.getAttribute('data-agency')], ['Production', 'hize'], ['Director', 'Park jinyong']])
+       .concat([['Model', src.getAttribute('data-model')], ['Awards', src.getAttribute('data-awards')]]).forEach(function(r){
         if (!r[1]) return;
         var d = document.createElement('div'), k = document.createElement('span'), v = document.createElement('span');
         k.className = 'mono mute'; k.textContent = r[0];
@@ -189,7 +191,7 @@
     var meta = {};
     document.querySelectorAll('[data-slug]').forEach(function(el){
       var a = '';
-      ['data-slug', 'data-client', 'data-agency', 'data-model', 'data-awards'].forEach(function(n){ a += ' ' + n + '="' + esc(el.getAttribute(n)) + '"'; });
+      ['data-slug', 'data-client', 'data-agency', 'data-model', 'data-awards', 'data-role'].forEach(function(n){ a += ' ' + n + '="' + esc(el.getAttribute(n)) + '"'; });
       var t = el.querySelector('a.t'), rec = { a: a, href: t ? t.getAttribute('href') : '', aw: !!el.getAttribute('data-awards') };
       var th = (el.getAttribute('data-thumb') || '').split('/').pop(), v = el.getAttribute('data-video');
       if (th) meta[th] = rec; if (v) meta[v] = rec;
