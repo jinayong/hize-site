@@ -88,7 +88,11 @@
        ['Director', 'Park jinyong'], ['Model', src.getAttribute('data-model')], ['Awards', src.getAttribute('data-awards')]].forEach(function(r){
         if (!r[1]) return;
         var d = document.createElement('div'), k = document.createElement('span'), v = document.createElement('span');
-        k.className = 'mono mute'; k.textContent = r[0]; v.textContent = r[1].split('|').join(' · '); if (r[0] === 'Awards') v.className = 'aw';
+        k.className = 'mono mute'; k.textContent = r[0];
+        if (r[0] === 'Awards') {
+          d.className = 'awrow'; v.className = 'aws';
+          r[1].split('|').forEach(function(a){ var i = document.createElement('span'); i.className = 'aw'; i.textContent = a; v.appendChild(i); });
+        } else v.textContent = r[1];
         d.appendChild(k); d.appendChild(v); cred.appendChild(d);
       });
     }
