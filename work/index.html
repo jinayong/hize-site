@@ -109,10 +109,10 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
 .vol .bars span:nth-child(2){animation-delay:-.3s}.vol .bars span:nth-child(3){animation-delay:-.6s}.vol .bars span:nth-child(4){animation-delay:-.15s}.vol .bars span:nth-child(5){animation-delay:-.45s}.vol .bars span:nth-child(6){animation-delay:-.75s}
 @keyframes eq{0%{transform:scaleY(.45)}100%{transform:scaleY(1)}}
 .vol .pct{display:inline-block;min-width:2.6em;text-align:right;opacity:0;transition:opacity .2s}.vol.adj .pct{opacity:.85}
-.pinfo{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 30px;padding-block:6px calc(env(safe-area-inset-bottom,0px) + 36px)}
+.pinfo{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px 30px;padding-block:6px calc(env(safe-area-inset-bottom,0px) + 36px)}
 .pinfo .r{display:inline-flex;align-items:baseline;gap:10px;font-size:15px;white-space:nowrap}
 .pinfo .r b{font-family:var(--mono);font-weight:400;font-size:10.5px;letter-spacing:.12em;opacity:.65;text-transform:uppercase}
-.pinfo .awl i{display:inline-block;width:6px;height:6px;background:var(--point);margin-right:8px;vertical-align:2px}.pinfo .awl .yr{font-family:var(--mono);font-size:12px;margin-right:8px}.pinfo .awl .sl{opacity:.5;margin:0 10px}.pinfo .aw span::before{content:"";display:inline-block;width:6px;height:6px;background:var(--point);margin-right:9px;vertical-align:2px}
+.pinfo .awl i{display:inline-block;width:6px;height:6px;background:var(--point);margin-right:8px;vertical-align:2px}.pinfo .awl .yr{font-family:var(--mono);font-size:12px;margin-right:8px}.pinfo .awl{display:inline-flex;align-items:baseline}.pinfo .awl .nms{display:inline-grid;gap:3px}.pinfo .aw span::before{content:"";display:inline-block;width:6px;height:6px;background:var(--point);margin-right:9px;vertical-align:2px}
 .pcopy{font-family:var(--mono);font-size:12px;letter-spacing:.1em;opacity:.55;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 28px)}
 @media(max-width:700px){.pbar .row{grid-template-columns:1fr auto}.pbar .ctl{justify-self:start}.pbar .ctl{grid-column:1/-1}.pbar .tt{white-space:normal}.pinfo .r{font-size:13.5px;white-space:normal}.ctl{gap:14px;font-size:10px}}
 @media (prefers-reduced-motion:reduce){.panel{transition:none}.vol .bars span{animation:none!important}}
@@ -159,7 +159,7 @@ function info(c){const box=document.getElementById("pinfo");box.textContent="";
  const aw=(c.dataset.awards||"").split("|").filter(Boolean);if(aw.length){const r=document.createElement("div");r.className="r";const b=document.createElement("b");b.textContent="Awards";const s=document.createElement("span");s.className="awl";
  const ys=aw.map(x=>(x.match(/^\d{4}/)||[""])[0]);const same=ys.every(y=>y===ys[0]);const ic=document.createElement("i");s.appendChild(ic);
  if(same&&ys[0]){const y=document.createElement("span");y.className="yr";y.textContent=ys[0];s.appendChild(y)}
- aw.forEach((x,k)=>{if(k){const sl=document.createElement("span");sl.className="sl";sl.textContent="/";s.appendChild(sl)}s.appendChild(document.createTextNode(same?x.replace(/^\d{4}\s*/,""):x))});
+ const nm=document.createElement("span");nm.className="nms";aw.forEach(x=>{const e=document.createElement("span");e.textContent=same?x.replace(/^\d{4}\s*/,""):x;nm.appendChild(e)});s.appendChild(nm);
  r.append(b,s);box.appendChild(r)}}
 function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;
  pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};pvid.classList.remove("ready");pvid.textContent="";
