@@ -81,7 +81,7 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-fo
 @media(max-width:560px){
  :root{--gut:max(18px,env(safe-area-inset-left,0px))}
  .g{padding-right:max(18px,env(safe-area-inset-right,0px))}
- .sec{height:82svh}
+ .sec{height:100svh}
  .hd nav{gap:14px;font-size:11px}.hd .mid{display:none}
  .cr{font-size:17px;margin-bottom:10px}
  .cred{gap:4px 16px;font-size:12.5px}.cred b,.awd b{font-size:9.5px;margin-right:6px}
@@ -123,15 +123,26 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-fo
 html.cv-lock,html.cv-lock body{overflow:hidden}
 @media(max-width:560px){.cv-hide{display:none}.cover{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}}
 @media (prefers-reduced-motion:reduce){.cover{transition:none}.cv-mark .d,.cv-tc i{animation:none}}
-@media (max-aspect-ratio:7/5){
- .sec{height:calc(56.25vw + 170px)}
- .sec>img,.vid{inset:0 0 auto 0;height:56.25vw}
- .vid iframe{width:100vw;height:56.25vw;transform:translate(-50%,-50%) scale(1.02)}
- .sec::after,.sec::before{display:none}
- .ov{padding-top:16px}
- .hd{background:linear-gradient(rgba(0,0,0,.45),transparent);padding-bottom:18px}
-}
 @media(max-width:1080px){.hd .mid,.pmid,.hzmid{display:none!important}}
+</style><style>
+.mbtn,.mmenu{display:none}
+@media(max-width:700px){
+ .mbtn{display:grid;gap:6px;width:28px;padding:6px 0;background:none;border:0;cursor:pointer;pointer-events:auto;position:relative;z-index:61}
+ .mbtn span{display:block;height:1.5px;background:#fff;box-shadow:0 0 6px rgba(0,0,0,.25)}
+ .mmenu{pointer-events:auto;display:block;position:fixed;inset:0;z-index:80;background:rgba(10,10,10,.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;padding:calc(env(safe-area-inset-top,0px) + 22px) max(18px,env(safe-area-inset-right,0px)) 40px max(18px,env(safe-area-inset-left,0px))}
+ html.mm-open .mmenu{opacity:1;visibility:visible}
+ html.mm-open,html.mm-open body{overflow:hidden}
+ .mx{position:absolute;top:calc(env(safe-area-inset-top,0px) + 18px);right:max(14px,env(safe-area-inset-right,0px));width:36px;height:36px;background:none;border:0;cursor:pointer}
+ .mx span{position:absolute;left:6px;right:6px;top:17px;height:1.5px;background:#fff}
+ .mx span:first-child{transform:rotate(45deg)}.mx span:last-child{transform:rotate(-45deg)}
+ .mmenu .mlinks{display:grid!important;gap:26px!important;margin-top:22vh;font-family:"Geist","Noto Sans KR",sans-serif!important;font-size:34px!important;font-weight:500!important;letter-spacing:-.02em!important;text-transform:none!important}
+ .mmenu .mlinks a{font:inherit!important;line-height:1.1!important;padding:0!important;margin:0!important;letter-spacing:inherit!important;text-transform:none!important}
+ .mmenu .mlinks a::before{display:none}
+ .mlinks a{color:#fff;text-decoration:none;display:inline-flex;align-items:center;width:max-content}
+ .mmenu .mlinks a[aria-current]::before{display:inline-block;content:"";width:9px;height:9px;background:#ff3b1f;margin-right:12px;transform:none}
+ .mtag{position:absolute;left:max(18px,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 28px);margin:0;font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+ .hd nav,.hznav,.pnavm{display:none!important}
+}
 </style></head><body>
 <div class="cover" id="cover" role="button" tabindex="0" aria-label="hize — 눌러서 들어가기">
   <div class="cv-row"><span>Film / Advertising / Production</span><span class="cv-hide">Directed by JY</span></div>
@@ -141,6 +152,8 @@ html.cv-lock,html.cv-lock body{overflow:hidden}
 </div>
 <header class="hd g"><a href="/" aria-label="hize 홈"><svg class="logo" viewBox="72 -722 1782 734"><path fill="#fff" d="M75.0 0.0V-710.0H181.0V-455.0Q202.0 -501.0 243.5 -522.5Q285.0 -544.0 337.0 -544.0Q424.0 -544.0 470.0 -487.5Q516.0 -431.0 516.0 -342.0V0.0H410.0V-314.0Q410.0 -455.0 309.0 -455.0Q250.0 -455.0 215.5 -418.5Q181.0 -382.0 181.0 -312.0V0.0ZM590.0 0.0V-532.0H696.0V0.0ZM588.0 -609.0V-715.0H698.0V-609.0ZM742.0 0.0V-95.0L1063.0 -445.0H752.0V-532.0H1185.0V-437.0L861.0 -87.0H1193.0V0.0ZM1437.0 12.0Q1359.0 12.0 1302.5 -22.5Q1246.0 -57.0 1215.5 -119.5Q1185.0 -182.0 1185.0 -266.0Q1185.0 -350.0 1215.5 -412.5Q1246.0 -475.0 1302.0 -509.5Q1358.0 -544.0 1434.0 -544.0Q1506.0 -544.0 1561.0 -510.5Q1616.0 -477.0 1646.5 -414.0Q1677.0 -351.0 1677.0 -262.0V-235.0H1295.0Q1299.0 -157.0 1336.5 -118.0Q1374.0 -79.0 1438.0 -79.0Q1485.0 -79.0 1515.5 -100.5Q1546.0 -122.0 1559.0 -160.0L1669.0 -153.0Q1648.0 -78.0 1586.5 -33.0Q1525.0 12.0 1437.0 12.0ZM1295.0 -315.0H1565.0Q1560.0 -386.0 1524.0 -420.0Q1488.0 -454.0 1434.0 -454.0Q1377.0 -454.0 1340.5 -418.5Q1304.0 -383.0 1295.0 -315.0Z"/><rect x="1693.44" y="-155.56" width="155.56" height="155.56" fill="#ff3b1f"/></svg></a>
 <a class="mid" href="/#home">Image visualizing</a>
+<button class="mbtn" type="button" aria-label="메뉴 열기" onclick="document.documentElement.classList.add('mm-open')"><span></span><span></span><span></span></button>
+<div class="mmenu" role="dialog" aria-label="메뉴"><button class="mx" type="button" aria-label="메뉴 닫기" onclick="document.documentElement.classList.remove('mm-open')"><span></span><span></span></button><nav class="mlinks"><a href="/#home" aria-current="page">Home</a><a href="/work/">Work</a><a href="/about/">About</a><a href="/contact/">Contact</a></nav><p class="mtag">Image visualizing</p></div><script>document.querySelectorAll(".mmenu").forEach(function(m){if(m.parentNode!==document.body)document.body.appendChild(m)});</script>
 <nav><a href="/#home" aria-current="page">Home</a><a href="/work/">Work</a><a href="/about/">About</a><a href="/contact/">Contact</a></nav></header>
 <main id="list"></main>
 <div class="cur" id="cur">PLAY ▶</div>
