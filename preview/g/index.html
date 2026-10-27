@@ -21,8 +21,10 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-fo
 .sec::after{content:"";position:absolute;inset:auto 0 0 0;height:48%;background:linear-gradient(transparent,rgba(0,0,0,.6));pointer-events:none;z-index:1}
 .sec::before{content:"";position:absolute;inset:0 0 auto 0;height:22%;background:linear-gradient(rgba(0,0,0,.28),transparent);pointer-events:none;z-index:1}
 .hit{position:absolute;inset:0;z-index:2;cursor:pointer;background:none;border:0;padding:0}
-.playhint{position:absolute;left:50%;top:50%;z-index:2;transform:translate(-50%,-50%);font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:#fff;padding:12px 18px;border:1px solid rgba(255,255,255,.7);pointer-events:none;transition:opacity .3s}
-.sec.playing .playhint{opacity:0}
+.playhint{display:none}
+.cur{position:fixed;left:0;top:0;z-index:6;pointer-events:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.45);transform:translate(14px,12px);opacity:0;transition:opacity .15s;white-space:nowrap}
+.cur.show{opacity:1}
+@media (hover:none){.sec:not(.playing) .playhint{display:block;position:absolute;left:50%;top:50%;z-index:2;transform:translate(-50%,-50%);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.45);pointer-events:none}}
 .ov{position:absolute;left:0;right:0;bottom:0;z-index:3;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px);pointer-events:none}
 .ov .ctl button{pointer-events:auto}
 .row{display:flex;justify-content:space-between;align-items:flex-end;gap:28px}
@@ -81,6 +83,7 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-fo
 <span class="mid">Image visualizing</span>
 <nav><a href="/preview/g/work/">Work</a><a href="/#about">About</a><a href="/contact/">Contact</a></nav></header>
 <main id="list"></main>
+<div class="cur" id="cur">PLAY ▶</div>
 <footer class="foot g"><span>COPYRIGHT © 2026 - HIZE</span><a href="/preview/g/work/">All work ↗</a></footer>
 <script>
 const F=[{"img": "w10-l.webp", "title": "무너X소연 아무너케 MV", "yt": "_Ll5iGOyWZA", "client": "LG U+", "agency": "CJ ENM", "awards": []}, {"img": "w11-l.webp", "title": "달콤한 순간 #허쉬태그", "yt": "6funHKmcqyU", "client": "Hershey’s", "agency": "덴츠코리아", "awards": []}, {"img": "w08-l.webp", "title": "아리수 마시지 마세요", "yt": "mnU4ztmOj3k", "client": "서울아리수본부", "agency": "CJ ENM", "awards": ["2024 공공브랜드 대상 최우수상", "2024 올해의 광고 PR상 동상"]}, {"img": "w09-l.webp", "title": "약하지 않아, 나약하지 않아", "yt": "ISSrcwWMz-o", "client": "식품의약품안전처", "agency": "CJ ENM", "awards": ["2025 올해의 광고 PR상 금상"]}, {"img": "w24.webp", "title": "MOTION FLEX", "yt": "d_5eAmHebVY", "client": "Sealy", "agency": "함파트너스", "awards": []}, {"img": "w04.webp", "title": "더하자, 유한젠", "yt": "RPUCzMxZFAs", "client": "유한클로락스", "agency": "PT Korea", "awards": []}];
@@ -92,7 +95,7 @@ F.forEach((f,i)=>{
  const s=document.createElement("section");s.className="sec";s.dataset.i=i;
  const im=new Image();im.src="/assets/img/work/"+f.img;im.alt=f.title;s.appendChild(im);
  const v=document.createElement("div");v.className="vid";s.appendChild(v);
- if(!AUTO.has(i)){const h=document.createElement("span");h.className="playhint";h.textContent="▶ PLAY";s.appendChild(h)}
+ if(!AUTO.has(i)){const h=document.createElement("span");h.className="playhint";h.textContent="PLAY ▶";s.appendChild(h)}
  const hit=document.createElement("button");hit.className="hit";hit.setAttribute("aria-label",f.title+" 재생");hit.onclick=()=>play(s);s.appendChild(hit);
  const ov=document.createElement("div");ov.className="ov g";
  const row=document.createElement("div");row.className="row";
@@ -144,5 +147,10 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{const s=e.target,i=+s.datas
 secs.forEach(s=>io.observe(s));
 function tc(x){const s=Math.floor(x),f=Math.floor((x-s)*24);return "00:"+pad(Math.floor(s/60))+":"+pad(s%60)+":"+pad(f)}
 setInterval(()=>{if(!cur)return;const live=yt.d>0;cur.querySelector(".tc").textContent=tc(live?yt.t:0);cur.querySelector(".bar1 i").style.transform="scaleX("+(live?Math.min(1,yt.t/yt.d):0)+")"},100);
+const curEl=document.getElementById("cur");
+document.addEventListener("pointermove",e=>{if(e.pointerType!=="mouse"){curEl.classList.remove("show");return}const s=e.target.closest&&e.target.closest(".sec");
+ const on=s&&!AUTO.has(+s.dataset.i)&&!s.classList.contains("playing")&&!e.target.closest(".ctl");curEl.classList.toggle("show",!!on);if(on){curEl.style.left=e.clientX+"px";curEl.style.top=e.clientY+"px"}});
+document.addEventListener("pointerleave",()=>curEl.classList.remove("show"));
+document.addEventListener("click",e=>{if(e.target.closest(".hit"))curEl.classList.remove("show")});
 paintVol();scrollTo(0,0);
 </script></body></html>
