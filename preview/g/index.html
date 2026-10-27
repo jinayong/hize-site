@@ -75,7 +75,7 @@ F.forEach((f,i)=>{const s=document.createElement("section");s.className="sec";
 const secs=[...document.querySelectorAll(".sec")];let t0=Date.now(),cur=null,yt={t:0,d:0};
 function stopV(x){const v=x.querySelector(".vid");v.classList.remove("ready");v.textContent=""}
 function playV(x){const v=x.querySelector(".vid");if(v.firstChild)return;const id=x.dataset.yt;const f=document.createElement("iframe");
- f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&start=4&iv_load_policy=3&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
+ f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
  f.addEventListener("load",()=>{try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:id}),"*")}catch(e){}});
  f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");v.appendChild(f);setTimeout(()=>v.classList.add("ready"),4000)}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.6){secs.forEach(x=>{if(x!==e.target){x.classList.remove("on");stopV(x)}});e.target.classList.add("on");yt={t:0,d:0};playV(e.target);cur=e.target;t0=Date.now()}}),{threshold:[.6]});
