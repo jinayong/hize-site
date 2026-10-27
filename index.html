@@ -137,7 +137,7 @@ html.cv-lock,html.cv-lock body{overflow:hidden}
 <footer class="foot g"><span>COPYRIGHT © 2026 - HIZE</span><a href="/work/">All work ↗</a></footer>
 <script>
 const F=[{"img": "w10-l.webp", "title": "무너X소연 아무너케 MV", "yt": "_Ll5iGOyWZA", "client": "LG U+", "agency": "CJ ENM", "awards": []}, {"img": "w11-l.webp", "title": "달콤한 순간 #허쉬태그", "yt": "6funHKmcqyU", "client": "Hershey’s", "agency": "덴츠코리아", "awards": []}, {"img": "w08-l.webp", "title": "아리수 마시지 마세요", "yt": "mnU4ztmOj3k", "client": "서울아리수본부", "agency": "CJ ENM", "awards": ["2024 공공브랜드 대상 최우수상", "2024 올해의 광고 PR상 동상"]}, {"img": "w09-l.webp", "title": "약하지 않아, 나약하지 않아", "yt": "ISSrcwWMz-o", "client": "식품의약품안전처", "agency": "CJ ENM", "awards": ["2025 올해의 광고 PR상 금상"]}, {"img": "w24.webp", "title": "MOTION FLEX", "yt": "d_5eAmHebVY", "client": "Sealy", "agency": "함파트너스", "awards": []}, {"img": "w04.webp", "title": "더하자, 유한젠", "yt": "RPUCzMxZFAs", "client": "유한클로락스", "agency": "PT Korea", "awards": []}];
-const AUTO=new Set([0,1,2,3]); // 첫 화면 + 다음 3개는 화면에 자리잡으면 자동 재생, 나머지는 눌러서 재생
+const AUTO={has:()=>true}; // 모든 작품: 화면에 자리잡으면 자동 재생, 다른 작품으로 넘어가면 앞 작품은 멈춤(소리도 꺼짐)
 const list=document.getElementById("list");
 const pad=n=>String(n).padStart(2,"0");
 let vol=0; // 0 = 무음
