@@ -127,6 +127,7 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
  .wc .t{padding:0 max(18px,env(safe-area-inset-left,0px))}
  .pbar .tt{white-space:normal;line-height:1.35}
 }
+@media (hover:none){.vol{display:none!important}}
 </style><style>
 .mbtn,.mmenu{display:none}
 @media(max-width:700px){
@@ -174,7 +175,7 @@ const pl=document.getElementById("pl"),pvid=document.getElementById("pvid"),ppos
 const pad=n=>String(n).padStart(2,"0");
 function frame(){return pvid.querySelector("iframe")}
 function cmd(func,args){const f=frame();if(!f)return;try{f.contentWindow.postMessage(JSON.stringify({event:"command",func:func,args:args||[]}),"*")}catch(e){}}
-function applyVol(){if(vol>0){cmd("unMute");cmd("setVolume",[Math.round(vol/6*100)])}else cmd("mute")}
+function applyVol(){if(matchMedia("(hover:none)").matches){cmd("mute");return}if(vol>0){cmd("unMute");cmd("setVolume",[Math.round(vol/6*100)])}else cmd("mute")}
 const volB=document.getElementById("pvol");
 function paintVol(){volB.classList.toggle("muted",vol===0);volB.querySelectorAll(".bars span").forEach(x=>x.classList.toggle("on",+x.dataset.k<=vol))}
 function setBarH(){panel.style.setProperty("--barh",document.getElementById("pbar").offsetHeight+"px")}

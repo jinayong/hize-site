@@ -124,6 +124,7 @@ html.cv-lock,html.cv-lock body{overflow:hidden}
 @media(max-width:560px){.cv-hide{display:none}.cover{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}}
 @media (prefers-reduced-motion:reduce){.cover{transition:none}.cv-mark .d,.cv-tc i{animation:none}}
 @media(max-width:1080px){.hd .mid,.pmid,.hzmid{display:none!important}}
+@media (hover:none){.vol{display:none!important}}
 </style><style>
 .mbtn,.mmenu{display:none}
 @media(max-width:700px){
@@ -186,7 +187,7 @@ const secs=[...document.querySelectorAll(".sec")];
 let cur=null,yt={t:0,d:0},t0=Date.now();
 function frameOf(s){return s&&s.querySelector(".vid iframe")}
 function cmd(s,func,args){const f=frameOf(s);if(!f)return;try{f.contentWindow.postMessage(JSON.stringify({event:"command",func:func,args:args||[]}),"*")}catch(e){}}
-function applyVol(s){if(vol>0){cmd(s,"unMute");cmd(s,"setVolume",[Math.round(vol/6*100)])}else cmd(s,"mute")}
+function applyVol(s){if(matchMedia("(hover:none)").matches){cmd(s,"mute");return}if(vol>0){cmd(s,"unMute");cmd(s,"setVolume",[Math.round(vol/6*100)])}else cmd(s,"mute")}
 function paintVol(){document.querySelectorAll(".vol").forEach(b=>{b.classList.toggle("muted",vol===0);b.querySelectorAll(".bars span").forEach(x=>x.classList.toggle("on",+x.dataset.k<=vol))})}
 function kAt(bars,x){const r=bars.getBoundingClientRect();return Math.max(0,Math.min(6,Math.round((x-r.left)/r.width*6)))}
 function preview(bars,k){bars.querySelectorAll("span").forEach(x=>x.classList.toggle("pv",k!==null&&+x.dataset.k<=k&&+x.dataset.k>vol))}
