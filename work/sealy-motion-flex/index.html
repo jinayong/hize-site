@@ -41,6 +41,7 @@ header.hz{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background
 .hznav a{color:#f6f6f4;text-decoration:none;display:inline-flex;align-items:center}
 .hznav a::before{content:"";display:inline-block;width:6px;height:6px;background:#ff3b1f;margin-right:7px;transform:scale(0);transition:transform .2s}
 .hznav a:hover::before,.hznav a[aria-current]::before{transform:scale(1)}
+@media(max-width:1080px){.hzmid{display:none}}
 @media(max-width:560px){.hzmid{display:none}.hznav{gap:14px;font-size:11px}}
 </style></head>
 <body>

@@ -112,7 +112,8 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-fo
 .cover[hidden]{display:none!important}
 .cv-row{display:flex;justify-content:space-between;gap:16px}
 .cv-c{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(18px,2.4vw,32px)}
-.cv-mark{width:min(72vw,820px);height:auto;display:block}
+.cv-mark{width:min(46vw,520px);height:auto;display:block}
+@media(max-width:560px){.cv-mark{width:62vw}}
 .cv-mark .d{animation:cvrec 1.2s steps(1) .4s 3}
 @keyframes cvrec{50%{opacity:0}}
 .cv-def{display:flex;gap:14px;text-transform:none;letter-spacing:.14em;opacity:.85}
@@ -122,6 +123,15 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-fo
 html.cv-lock,html.cv-lock body{overflow:hidden}
 @media(max-width:560px){.cv-hide{display:none}.cover{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}}
 @media (prefers-reduced-motion:reduce){.cover{transition:none}.cv-mark .d,.cv-tc i{animation:none}}
+@media (max-aspect-ratio:1/1){
+ .sec{height:calc(56.25vw + 170px)}
+ .sec>img,.vid{inset:0 0 auto 0;height:56.25vw}
+ .vid iframe{width:100vw;height:56.25vw;transform:translate(-50%,-50%) scale(1.02)}
+ .sec::after,.sec::before{display:none}
+ .ov{padding-top:16px}
+ .hd{background:linear-gradient(rgba(0,0,0,.45),transparent);padding-bottom:18px}
+}
+@media(max-width:1080px){.hd .mid,.pmid,.hzmid{display:none!important}}
 </style></head><body>
 <div class="cover" id="cover" role="button" tabindex="0" aria-label="hize — 눌러서 들어가기">
   <div class="cv-row"><span>Film / Advertising / Production</span><span class="cv-hide">Directed by JY</span></div>
