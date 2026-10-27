@@ -175,6 +175,12 @@ const pad=n=>String(n).padStart(2,"0");
 function frame(){return pvid.querySelector("iframe")}
 function cmd(func,args){const f=frame();if(!f)return;try{f.contentWindow.postMessage(JSON.stringify({event:"command",func:func,args:args||[]}),"*")}catch(e){}}
 function applyVol(){if(vol>0){cmd("unMute");cmd("setVolume",[Math.round(vol/6*100)])}else cmd("mute")}
+// 폰: 브라우저가 소리 재생을 영상 안에서 직접 누른 경우에만 허용해서, 소리를 켜면 유튜브 기본 플레이어로 바꿔 한 번 더 누르게 함
+function soundOnTouch(){const c=cards[at];const id=c&&c.dataset.yt;if(!id||pvid.dataset.snd)return;pvid.dataset.snd="1";
+ const t=Math.floor(yt.t||0);const f=document.createElement("iframe");f.allow="autoplay; encrypted-media; fullscreen";f.setAttribute("allowfullscreen","");
+ f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&controls=1&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&start="+t+"&enablejsapi=1&origin="+encodeURIComponent(location.origin);
+ f.style.cssText="pointer-events:auto;transform:translate(-50%,-50%) scale(1)";pvid.textContent="";pvid.appendChild(f);pvid.classList.add("ready");
+ f.addEventListener("load",()=>{try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:id}),"*")}catch(e){}})}
 const volB=document.getElementById("pvol");
 function paintVol(){volB.classList.toggle("muted",vol===0);volB.querySelectorAll(".bars span").forEach(x=>x.classList.toggle("on",+x.dataset.k<=vol))}
 function setBarH(){panel.style.setProperty("--barh",document.getElementById("pbar").offsetHeight+"px")}
@@ -187,11 +193,11 @@ function info(c){const box=document.getElementById("pinfo");box.textContent="";
  const nm=document.createElement("span");nm.className="nms";aw.forEach(x=>{const e=document.createElement("span");e.textContent=same?x.replace(/^\d{4}\s*/,""):x;nm.appendChild(e)});s.appendChild(nm);
  r.append(b,s);box.appendChild(r)}}
 function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;
- pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};pvid.classList.remove("ready");pvid.textContent="";
+ pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0}; pvid.classList.remove("ready");pvid.textContent="";delete pvid.dataset.snd;
  ppost.src=c.querySelector("img").src;
  const f=document.createElement("iframe");f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");
  if(id){f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
-  f.addEventListener("load",()=>{try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:id}),"*")}catch(e){};setTimeout(()=>cmd("playVideo"),400);setTimeout(()=>cmd("playVideo"),1500)});setTimeout(()=>pvid.classList.add("ready"),3000)}
+  f.addEventListener("load",()=>{try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:id}),"*")}catch(e){};setTimeout(()=>cmd("playVideo"),400);setTimeout(()=>cmd("playVideo"),1500)});setTimeout(()=>pvid.classList.add("ready"),TOUCH?5500:3000)}
  else{f.src="https://player.vimeo.com/video/"+vm+"?background=1&autoplay=1&loop=1&muted=1";setTimeout(()=>pvid.classList.add("ready"),1500)}
  pvid.appendChild(f);
  const tt=document.getElementById("ptt");tt.textContent=c.dataset.title+" ";const sp=document.createElement("span");sp.textContent="— "+c.dataset.client;tt.appendChild(sp);
@@ -210,18 +216,18 @@ addEventListener("keydown",e=>{if(pl.hidden)return;if(e.key==="Escape"){isOpen?s
 addEventListener("resize",()=>{if(!pl.hidden)setBarH()});
 addEventListener("message",e=>{if(!/youtube/.test(e.origin))return;let m;try{m=typeof e.data==="string"?JSON.parse(e.data):e.data}catch(_){return}
  if(!m||!m.info)return;if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(m.info.duration>0)yt.d=m.info.duration;
- if(m.info.playerState===1&&!pvid.classList.contains("ready")){setTimeout(()=>pvid.classList.add("ready"),300);applyVol();cmd("unloadModule",["captions"])}});
+ if(m.info.playerState===1&&!pvid.classList.contains("ready")&&!pvid.dataset.snd){setTimeout(()=>pvid.classList.add("ready"),TOUCH?2600:300);applyVol();cmd("unloadModule",["captions"])}});
 function tc(x){const s=Math.floor(x),f=Math.floor((x-s)*24);return "00:"+pad(Math.floor(s/60))+":"+pad(s%60)+":"+pad(f)}
 setInterval(()=>{if(pl.hidden)return;const live=yt.d>0;document.getElementById("ptc").textContent=tc(live?yt.t:0);document.getElementById("pline").style.transform="scaleX("+(live?Math.min(1,yt.t/yt.d):0)+")"},100);
 const barsEl=volB.querySelector(".bars");let drag=false;
 function kAt(x){const r=barsEl.getBoundingClientRect();return Math.max(0,Math.min(6,Math.round((x-r.left)/r.width*6)))}
 function showPct(){volB.classList.add("adj");volB.querySelector(".pct").textContent=Math.round(vol/6*100)+"%";clearTimeout(volB._t);volB._t=setTimeout(()=>volB.classList.remove("adj"),900)}
-function setK(k){showPct();if(k!==vol){vol=k;paintVol();applyVol()}}
+function setK(k){showPct();if(k!==vol){vol=k;paintVol();if(TOUCH&&vol>0)soundOnTouch();applyVol()}}
 barsEl.addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();drag=true;try{barsEl.setPointerCapture(e.pointerId)}catch(_){};setK(kAt(e.clientX))});
 barsEl.addEventListener("pointermove",e=>{if(drag)setK(kAt(e.clientX));else barsEl.querySelectorAll("span").forEach(x=>x.classList.toggle("pv",+x.dataset.k<=kAt(e.clientX)&&+x.dataset.k>vol))});
 barsEl.addEventListener("pointerleave",()=>barsEl.querySelectorAll("span").forEach(x=>x.classList.remove("pv")));
 addEventListener("pointerup",()=>{drag=false});
-volB.addEventListener("click",e=>{if(e.target.closest(".bars"))return;vol=vol?0:4;paintVol();applyVol();showPct()});
+volB.addEventListener("click",e=>{if(e.target.closest(".bars"))return;vol=vol?0:4;paintVol();if(TOUCH&&vol>0)soundOnTouch();applyVol();showPct()});
 const wcur=document.getElementById("wcur");
 document.addEventListener("pointermove",e=>{if(e.pointerType!=="mouse"||!pl.hidden){wcur.classList.remove("show");return}const m=e.target.closest&&e.target.closest(".wc .m");wcur.classList.toggle("show",!!m);if(m){wcur.style.left=e.clientX+"px";wcur.style.top=e.clientY+"px"}});
 document.addEventListener("pointerleave",()=>wcur.classList.remove("show"));
