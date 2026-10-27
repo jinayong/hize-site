@@ -127,7 +127,6 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
  .wc .t{padding:0 max(18px,env(safe-area-inset-left,0px))}
  .pbar .tt{white-space:normal;line-height:1.35}
 }
-@media (hover:none){.vol{display:none!important}}
 </style><style>
 .mbtn,.mmenu{display:none}
 @media(max-width:700px){
@@ -169,13 +168,17 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
 <div class="wcur" id="wcur">PLAY ▶</div>
 <footer class="foot g">COPYRIGHT © 2026 - HIZE</footer>
 <script>
-const cards=[...document.querySelectorAll(".wc")];const TOUCH=matchMedia("(hover:none)").matches; // 폰은 소리를 켜면 영상이 멈춰서, 무음으로 시작하고 VOL을 눌러 소리를 켬
+const cards=[...document.querySelectorAll(".wc")];const TOUCH=matchMedia("(hover:none)").matches; // 폰은 무음으로 시작, VOL을 누르면 소리를 시도하고 막히면 무음으로 되돌림
 let at=-1,vol=TOUCH?0:4,yt={t:0,d:0},isOpen=false;
 const pl=document.getElementById("pl"),pvid=document.getElementById("pvid"),ppost=document.getElementById("ppost"),panel=document.getElementById("panel");
 const pad=n=>String(n).padStart(2,"0");
 function frame(){return pvid.querySelector("iframe")}
 function cmd(func,args){const f=frame();if(!f)return;try{f.contentWindow.postMessage(JSON.stringify({event:"command",func:func,args:args||[]}),"*")}catch(e){}}
-function applyVol(){if(matchMedia("(hover:none)").matches){cmd("mute");return}if(vol>0){cmd("unMute");cmd("setVolume",[Math.round(vol/6*100)])}else cmd("mute")}
+let lastState=-1,guardT;
+function applyVol(){if(vol>0){cmd("unMute");cmd("setVolume",[Math.round(vol/6*100)]);cmd("playVideo");
+  if(TOUCH){clearTimeout(guardT);guardT=setTimeout(()=>{if(lastState===2||lastState===-1){cmd("mute");cmd("playVideo");vol=0;paintVol();tip()}},1200)}}else cmd("mute")}
+function tip(){let t=document.getElementById("vtip");if(!t){t=document.createElement("div");t.id="vtip";t.style.cssText="position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 110px);transform:translateX(-50%);z-index:40;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#fff;background:rgba(0,0,0,.6);padding:8px 12px;white-space:nowrap;transition:opacity .4s";pl.appendChild(t)}
+ t.textContent="이 브라우저에서는 소리를 켤 수 없어요";t.style.opacity="1";clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity="0",2200)}
 const volB=document.getElementById("pvol");
 function paintVol(){volB.classList.toggle("muted",vol===0);volB.querySelectorAll(".bars span").forEach(x=>x.classList.toggle("on",+x.dataset.k<=vol))}
 function setBarH(){panel.style.setProperty("--barh",document.getElementById("pbar").offsetHeight+"px")}
@@ -210,7 +213,7 @@ let navT;pl.addEventListener("mousemove",()=>{pl.classList.add("nav");clearTimeo
 addEventListener("keydown",e=>{if(pl.hidden)return;if(e.key==="Escape"){isOpen?setOpen(false):closePl()}if(e.key==="ArrowLeft")openAt(at-1);if(e.key==="ArrowRight")openAt(at+1);if(e.key==="ArrowDown")setOpen(true);if(e.key==="ArrowUp")setOpen(false)});
 addEventListener("resize",()=>{if(!pl.hidden)setBarH()});
 addEventListener("message",e=>{if(!/youtube/.test(e.origin))return;let m;try{m=typeof e.data==="string"?JSON.parse(e.data):e.data}catch(_){return}
- if(!m||!m.info)return;if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(m.info.duration>0)yt.d=m.info.duration;
+ if(!m||!m.info)return;if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(m.info.duration>0)yt.d=m.info.duration;if(typeof m.info.playerState==="number")lastState=m.info.playerState;
  if(m.info.playerState===1&&!pvid.classList.contains("ready")){setTimeout(()=>pvid.classList.add("ready"),300);applyVol();cmd("unloadModule",["captions"])}});
 function tc(x){const s=Math.floor(x),f=Math.floor((x-s)*24);return "00:"+pad(Math.floor(s/60))+":"+pad(s%60)+":"+pad(f)}
 setInterval(()=>{if(pl.hidden)return;const live=yt.d>0;document.getElementById("ptc").textContent=tc(live?yt.t:0);document.getElementById("pline").style.transform="scaleX("+(live?Math.min(1,yt.t/yt.d):0)+")"},100);
