@@ -21,7 +21,8 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans)}
 @keyframes kb{to{transform:scale(1.1)}}
 .sec::after{content:"";position:absolute;inset:auto 0 0 0;height:35%;background:linear-gradient(transparent,rgba(0,0,0,.45));pointer-events:none}
 .ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 26px)}
-.segs{display:grid;grid-auto-flow:column;gap:6px;margin-top:18px}
+.bar1{position:relative;height:2px;background:rgba(255,255,255,.3);margin-top:18px;overflow:hidden}
+.bar1 i{position:absolute;inset:0;background:#fff;transform-origin:left;transform:scaleX(0);transition:transform .1s linear}
 .seg{position:relative;height:1px;background:rgba(255,255,255,.3)}
 .seg.done{background:#fff}
 .line{position:absolute;inset:0;overflow:hidden}
@@ -67,23 +68,28 @@ const list=document.getElementById("list");
 F.forEach((f,i)=>{const s=document.createElement("section");s.className="sec";
  const im=new Image();im.src="/assets/img/work/"+f[0]+(["w10","w11","w08","w09"].includes(f[0])?"-l":"")+".webp";im.alt="";s.appendChild(im);const v=document.createElement("div");v.className="vid";s.appendChild(v);s.dataset.yt=f[3];s.onclick=()=>openPl(f[3]);
  const ov=document.createElement("div");ov.className="ov g";
- ov.innerHTML='<div class="row"><div><div class="lb"></div><div class="cr"></div></div><div class="ctl"><span class="idx">'+String(i+1).padStart(2,'0')+' / '+String(F.length).padStart(2,'0')+'</span><span class="rec tc">00:00:00:00</span></div></div><div class="segs">'+F.map(()=>'<div class="seg"><span class="line"><i></i></span></div>').join('')+'</div>';
+ ov.innerHTML='<div class="row"><div><div class="lb"></div><div class="cr"></div></div><div class="ctl"><span class="idx">'+String(i+1).padStart(2,'0')+' / '+String(F.length).padStart(2,'0')+'</span><span class="rec tc">00:00:00:00</span></div></div><div class="bar1"><i></i></div>';
  ov.querySelector(".lb").textContent=f[2]+" · Dir. Park jinyong";
  ov.querySelector(".cr").textContent=f[1];
- ov.querySelectorAll(".seg").forEach((g,k)=>g.classList.add(k<i?"done":k===i?"now":"x"));
  s.appendChild(ov);list.appendChild(s)});
-const secs=[...document.querySelectorAll(".sec")];let t0=Date.now(),cur=null;
+const secs=[...document.querySelectorAll(".sec")];let t0=Date.now(),cur=null,yt={t:0,d:0};
 function stopV(x){const v=x.querySelector(".vid");v.classList.remove("ready");v.textContent=""}
 function playV(x){const v=x.querySelector(".vid");if(v.firstChild)return;const id=x.dataset.yt;const f=document.createElement("iframe");
- f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&start=4&iv_load_policy=3&disablekb=1";
+ f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&start=4&iv_load_policy=3&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
+ f.addEventListener("load",()=>{try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:id}),"*")}catch(e){}});
  f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");v.appendChild(f);setTimeout(()=>v.classList.add("ready"),1600)}
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.6){secs.forEach(x=>{if(x!==e.target){x.classList.remove("on");stopV(x)}});e.target.classList.add("on");playV(e.target);cur=e.target;t0=Date.now()}}),{threshold:[.6]});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.6){secs.forEach(x=>{if(x!==e.target){x.classList.remove("on");stopV(x)}});e.target.classList.add("on");yt={t:0,d:0};playV(e.target);cur=e.target;t0=Date.now()}}),{threshold:[.6]});
 const pl=document.getElementById("pl"),plb=document.getElementById("plb");
 function openPl(id){plb.innerHTML='<iframe allow="autoplay; encrypted-media; fullscreen" allowfullscreen src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1"></iframe>';pl.hidden=false}
 function closePl(){pl.hidden=true;plb.textContent=""}
 document.getElementById("plx").onclick=closePl;addEventListener("keydown",e=>{if(e.key==="Escape")closePl()});
 secs.forEach(s=>io.observe(s));
 scrollTo(0,0);
-setInterval(()=>{if(!cur)return;const ms=Date.now()-t0,sc=Math.floor(ms/1000),fr=Math.floor((ms%1000)/1000*24);cur.querySelector(".tc").textContent="00:00:"+String(sc%60).padStart(2,"0")+":"+String(fr).padStart(2,"0")},80);
+addEventListener("message",e=>{if(!/youtube/.test(e.origin))return;let m;try{m=typeof e.data==="string"?JSON.parse(e.data):e.data}catch(_){return}
+ if(m&&m.info){if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(typeof m.info.duration==="number"&&m.info.duration>0)yt.d=m.info.duration}});
+function tc(sec){const s=Math.floor(sec),f=Math.floor((sec-s)*24);return "00:"+String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")+":"+String(f).padStart(2,"0")}
+setInterval(()=>{if(!cur)return;const live=yt.d>0;const t=live?yt.t:(Date.now()-t0)/1000;
+ cur.querySelector(".tc").textContent=tc(t);
+ cur.querySelector(".bar1 i").style.transform="scaleX("+(live?Math.min(1,yt.t/yt.d):0)+")"},100);
 </script>
 </body></html>
