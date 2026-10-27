@@ -1,95 +1,124 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>hize — preview G</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: 대표작이 한 화면씩 꽉 차게 세로로 이어짐. 위에 메뉴·한 줄 문구·로고, 아래에 진행선·크레딧·타임코드가 영상 위에 얹힘. 단일 다크 톤 */
-:root{--point:#ff3b1f;--ink:#0b0b0b;--paper:#f6f6f4;--mute:rgba(246,246,244,.7);--sans:"Pretendard","Apple SD Gothic Neo","Helvetica Neue",Arial,sans-serif;--mono:"Geist Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
-*{box-sizing:border-box}
+/* Layout: 대표작이 한 화면씩 꽉 차게 이어지고, 메뉴·크레딧·타임코드·볼륨이 영상 위에 얹힘 */
+:root{--point:#ff3b1f;--ink:#0b0b0b;--paper:#f6f6f4;--sans:"Pretendard","Apple SD Gothic Neo","Helvetica Neue",Arial,sans-serif;--mono:"Geist Mono",ui-monospace,Menlo,monospace;--gut:max(32px,env(safe-area-inset-left,0px));color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
 html{scroll-snap-type:y proximity}
-body{background:var(--ink);color:var(--paper);font-family:var(--sans)}
-.g{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
-.hd{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:flex-start;padding-block:calc(env(safe-area-inset-top,0px) + 24px) 0;pointer-events:none;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.25)}
-.brand{display:grid;gap:10px;justify-items:start}
-.hd .logo{width:clamp(96px,9vw,150px);height:auto;display:block}
-.hd .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
-.hd nav{display:flex;gap:clamp(18px,2.4vw,36px);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;pointer-events:auto}
-.hd nav a{color:inherit;text-decoration:none}
+body{background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.g{padding-left:var(--gut);padding-right:max(32px,env(safe-area-inset-right,0px))}
+.hd{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding-block:calc(env(safe-area-inset-top,0px) + 24px) 0;pointer-events:none;color:#fff}
+.hd a{pointer-events:auto;color:inherit;text-decoration:none}
+.logo{width:clamp(84px,8vw,140px);height:auto;display:block;filter:drop-shadow(0 1px 8px rgba(0,0,0,.2))}
+.hd .mid{position:absolute;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.3);white-space:nowrap}
+.hd nav{display:flex;gap:clamp(16px,2.4vw,36px);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.3)}
 .sec{position:relative;height:100vh;height:100svh;overflow:hidden;scroll-snap-align:start;background:#000}
-.sec img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none;transform:scale(1.03)}
-.sec.on img{animation:kb 9s linear forwards}
-@keyframes kb{to{transform:scale(1.1)}}
-.sec::after{content:"";position:absolute;inset:auto 0 0 0;height:35%;background:linear-gradient(transparent,rgba(0,0,0,.45));pointer-events:none}
-.ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 26px)}
-.bar1{position:relative;height:2px;background:rgba(255,255,255,.3);margin-top:18px;overflow:hidden}
-.bar1 i{position:absolute;inset:0;background:#fff;transform-origin:left;transform:scaleX(0);transition:transform .1s linear}
-.seg{position:relative;height:1px;background:rgba(255,255,255,.3)}
-.seg.done{background:#fff}
-.line{position:absolute;inset:0;overflow:hidden}
-.line i{position:absolute;inset:0;background:#fff;transform-origin:left;transform:scaleX(0)}
-.sec.on .seg.now .line i{animation:fill 9s linear forwards}
-.seg.now .line i{background:var(--point)}
-@keyframes fill{to{transform:scaleX(1)}}
-.row{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
-.lb{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
-.cr{font-size:clamp(16px,1.35vw,20px);font-weight:500;letter-spacing:-.01em;line-height:1.3}
-.ctl{display:flex;align-items:center;gap:18px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;white-space:nowrap}
-.ctl .rec{display:inline-flex;align-items:center;gap:7px}
-.ctl .rec::before{content:"";width:7px;height:7px;background:var(--point);animation:bl 1.2s steps(1) infinite}
-@keyframes bl{50%{opacity:0}}
-.ctl .idx{opacity:.7}
-.foot{padding-block:56px calc(env(safe-area-inset-bottom,0px) + 36px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:rgba(246,246,244,.55)}
-.foot a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--point)}
-@media(max-width:700px){.hd nav{gap:14px;font-size:11px}.row{flex-direction:column;align-items:flex-start;gap:10px}.ctl{gap:14px}.hd .logo{width:84px}}
-@media (prefers-reduced-motion:reduce){.sec.on img,.sec.on .line i{animation:none}}
+.sec>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
 .vid{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity .5s}
 .vid.ready{opacity:1}
-.vid iframe{position:absolute;left:50%;top:50%;width:max(100vw,177.78vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%) scale(1.02);border:0;pointer-events:none}
-.sec{cursor:pointer}
-.pl{position:fixed;inset:0;z-index:20;background:#000;display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 56px) 16px 32px}
-.pl[hidden]{display:none}
-.pl .box{width:min(100%,calc((100vh - 120px)*16/9));aspect-ratio:16/9}
-.pl iframe{width:100%;height:100%;border:0}
-.pl button{position:absolute;top:calc(env(safe-area-inset-top,0px) + 18px);right:24px;background:none;border:0;color:#fff;font-family:var(--mono);font-size:12px;letter-spacing:.1em;cursor:pointer}
-html,body{margin:0}
+.vid iframe{position:absolute;left:50%;top:50%;width:max(100vw,177.78vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%) scale(1.2);border:0;pointer-events:none}
+.sec::after{content:"";position:absolute;inset:auto 0 0 0;height:48%;background:linear-gradient(transparent,rgba(0,0,0,.6));pointer-events:none;z-index:1}
+.sec::before{content:"";position:absolute;inset:0 0 auto 0;height:22%;background:linear-gradient(rgba(0,0,0,.28),transparent);pointer-events:none;z-index:1}
+.hit{position:absolute;inset:0;z-index:2;cursor:pointer;background:none;border:0;padding:0}
+.playhint{position:absolute;left:50%;top:50%;z-index:2;transform:translate(-50%,-50%);font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:#fff;padding:12px 18px;border:1px solid rgba(255,255,255,.7);pointer-events:none;transition:opacity .3s}
+.sec.playing .playhint{opacity:0}
+.ov{position:absolute;left:0;right:0;bottom:0;z-index:3;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px);pointer-events:none}
+.ov .ctl button{pointer-events:auto}
+.row{display:flex;justify-content:space-between;align-items:flex-end;gap:28px}
+.cr{font-size:clamp(17px,1.5vw,22px);font-weight:500;letter-spacing:-.01em;line-height:1.25;margin-bottom:12px}
+.cred{display:flex;flex-wrap:wrap;gap:6px 26px;font-size:14px}
+.cred span{white-space:nowrap}
+.cred b,.awd b{font-family:var(--mono);font-weight:400;font-size:10.5px;letter-spacing:.12em;opacity:.65;margin-right:10px;text-transform:uppercase}
+.awd{display:flex;gap:10px;margin-top:8px;font-size:13.5px;align-items:baseline}
+.awd i{display:inline-block;width:7px;height:7px;background:var(--point);flex:none;transform:translateY(-1px)}
+.awd .y{font-family:var(--mono);font-size:12px}
+.awd .n{display:grid;gap:3px}
+.ctl{display:flex;align-items:center;gap:22px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;white-space:nowrap}
+.idx{opacity:.7}
+.rec{display:inline-flex;align-items:center;gap:8px;min-width:96px}
+.rec::before{content:"";width:7px;height:7px;background:var(--point);opacity:.35}
+.sec.playing .rec::before{opacity:1;animation:bl 1.2s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.vol{display:inline-flex;align-items:flex-end;gap:10px;background:none;border:0;color:#fff;font:inherit;letter-spacing:inherit;padding:6px 0;cursor:pointer}
+.vol .lbl{line-height:1}
+.bars{display:inline-flex;align-items:flex-end;gap:3px;height:12px}
+.bars span{width:2px;background:rgba(255,255,255,.35);display:block;cursor:pointer}
+.bars span.on{background:#fff}
+.vol.muted .lbl::after{content:" OFF";opacity:.6}
+.bar1{position:relative;height:2px;background:rgba(255,255,255,.28);margin-top:18px;overflow:hidden}
+.bar1 i{position:absolute;inset:0;background:#fff;transform-origin:left;transform:scaleX(0)}
+.foot{padding-block:40px calc(env(safe-area-inset-bottom,0px) + 32px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:rgba(246,246,244,.55)}
+.foot a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--point)}
+@media(max-width:820px){.row{flex-direction:column;align-items:flex-start;gap:14px}.ctl{gap:16px}}
+@media(max-width:560px){
+ :root{--gut:max(18px,env(safe-area-inset-left,0px))}
+ .g{padding-right:max(18px,env(safe-area-inset-right,0px))}
+ .sec{height:82svh}
+ .hd nav{gap:14px;font-size:11px}.hd .mid{display:none}
+ .cr{font-size:17px;margin-bottom:10px}
+ .cred{gap:4px 16px;font-size:12.5px}.cred b,.awd b{font-size:9.5px;margin-right:6px}
+ .awd{font-size:12.5px}
+ .ctl{font-size:10px;gap:14px}.rec{min-width:86px}
+}
+@media (prefers-reduced-motion:reduce){.vid{transition:none}.sec.playing .rec::before{animation:none}}
 </style></head><body>
-
-<header class="hd g">
-  <div class="brand"><svg class="logo" viewBox="72 -722 1782 734" aria-label="hize"><path fill="#fff" d="M75.0 0.0V-710.0H181.0V-455.0Q202.0 -501.0 243.5 -522.5Q285.0 -544.0 337.0 -544.0Q424.0 -544.0 470.0 -487.5Q516.0 -431.0 516.0 -342.0V0.0H410.0V-314.0Q410.0 -455.0 309.0 -455.0Q250.0 -455.0 215.5 -418.5Q181.0 -382.0 181.0 -312.0V0.0ZM590.0 0.0V-532.0H696.0V0.0ZM588.0 -609.0V-715.0H698.0V-609.0ZM742.0 0.0V-95.0L1063.0 -445.0H752.0V-532.0H1185.0V-437.0L861.0 -87.0H1193.0V0.0ZM1437.0 12.0Q1359.0 12.0 1302.5 -22.5Q1246.0 -57.0 1215.5 -119.5Q1185.0 -182.0 1185.0 -266.0Q1185.0 -350.0 1215.5 -412.5Q1246.0 -475.0 1302.0 -509.5Q1358.0 -544.0 1434.0 -544.0Q1506.0 -544.0 1561.0 -510.5Q1616.0 -477.0 1646.5 -414.0Q1677.0 -351.0 1677.0 -262.0V-235.0H1295.0Q1299.0 -157.0 1336.5 -118.0Q1374.0 -79.0 1438.0 -79.0Q1485.0 -79.0 1515.5 -100.5Q1546.0 -122.0 1559.0 -160.0L1669.0 -153.0Q1648.0 -78.0 1586.5 -33.0Q1525.0 12.0 1437.0 12.0ZM1295.0 -315.0H1565.0Q1560.0 -386.0 1524.0 -420.0Q1488.0 -454.0 1434.0 -454.0Q1377.0 -454.0 1340.5 -418.5Q1304.0 -383.0 1295.0 -315.0Z"/><rect x="1693.44" y="-155.56" width="155.56" height="155.56" fill="#ff3b1f"/></svg></div>
-  <nav><a href="/preview/g/work/">Work</a><a href="/#about">About</a><a href="/contact/">Contact</a></nav>
-</header>
+<header class="hd g"><a href="/preview/g/" aria-label="hize 홈"><svg class="logo" viewBox="72 -722 1782 734"><path fill="#fff" d="M75.0 0.0V-710.0H181.0V-455.0Q202.0 -501.0 243.5 -522.5Q285.0 -544.0 337.0 -544.0Q424.0 -544.0 470.0 -487.5Q516.0 -431.0 516.0 -342.0V0.0H410.0V-314.0Q410.0 -455.0 309.0 -455.0Q250.0 -455.0 215.5 -418.5Q181.0 -382.0 181.0 -312.0V0.0ZM590.0 0.0V-532.0H696.0V0.0ZM588.0 -609.0V-715.0H698.0V-609.0ZM742.0 0.0V-95.0L1063.0 -445.0H752.0V-532.0H1185.0V-437.0L861.0 -87.0H1193.0V0.0ZM1437.0 12.0Q1359.0 12.0 1302.5 -22.5Q1246.0 -57.0 1215.5 -119.5Q1185.0 -182.0 1185.0 -266.0Q1185.0 -350.0 1215.5 -412.5Q1246.0 -475.0 1302.0 -509.5Q1358.0 -544.0 1434.0 -544.0Q1506.0 -544.0 1561.0 -510.5Q1616.0 -477.0 1646.5 -414.0Q1677.0 -351.0 1677.0 -262.0V-235.0H1295.0Q1299.0 -157.0 1336.5 -118.0Q1374.0 -79.0 1438.0 -79.0Q1485.0 -79.0 1515.5 -100.5Q1546.0 -122.0 1559.0 -160.0L1669.0 -153.0Q1648.0 -78.0 1586.5 -33.0Q1525.0 12.0 1437.0 12.0ZM1295.0 -315.0H1565.0Q1560.0 -386.0 1524.0 -420.0Q1488.0 -454.0 1434.0 -454.0Q1377.0 -454.0 1340.5 -418.5Q1304.0 -383.0 1295.0 -315.0Z"/><rect x="1693.44" y="-155.56" width="155.56" height="155.56" fill="#ff3b1f"/></svg></a>
+<span class="mid">Film / Advertising / Production</span>
+<nav><a href="/preview/g/work/">Work</a><a href="/#about">About</a><a href="/contact/">Contact</a></nav></header>
 <main id="list"></main>
-<div class="pl" id="pl" hidden><button id="plx">CLOSE ✕</button><div class="box" id="plb"></div></div>
 <footer class="foot g"><span>COPYRIGHT © 2026 - HIZE</span><a href="/preview/g/work/">All work ↗</a></footer>
-
 <script>
-const F=[["w10","무너X소연 아무너케 MV","LG U+","_Ll5iGOyWZA"],["w11","달콤한 순간 #허쉬태그","HERSHEY’S","6funHKmcqyU"],["w08","아리수 마시지 마세요","서울아리수본부","mnU4ztmOj3k"],["w09","약하지 않아, 나약하지 않아","식품의약품안전처","ISSrcwWMz-o"],["w24","MOTION FLEX","SEALY","d_5eAmHebVY"],["w04","더하자, 유한젠","유한클로락스","RPUCzMxZFAs"]];
+const F=[{"img": "w10-l.webp", "title": "무너X소연 아무너케 MV", "yt": "_Ll5iGOyWZA", "client": "LG U+", "agency": "CJ ENM", "awards": []}, {"img": "w11-l.webp", "title": "달콤한 순간 #허쉬태그", "yt": "6funHKmcqyU", "client": "Hershey’s", "agency": "덴츠코리아", "awards": []}, {"img": "w08-l.webp", "title": "아리수 마시지 마세요", "yt": "mnU4ztmOj3k", "client": "서울아리수본부", "agency": "CJ ENM", "awards": ["2024 공공브랜드 대상 최우수상", "2024 올해의 광고 PR상 동상"]}, {"img": "w09-l.webp", "title": "약하지 않아, 나약하지 않아", "yt": "ISSrcwWMz-o", "client": "식품의약품안전처", "agency": "CJ ENM", "awards": ["2025 올해의 광고 PR상 금상"]}, {"img": "w24.webp", "title": "MOTION FLEX", "yt": "d_5eAmHebVY", "client": "Sealy", "agency": "함파트너스", "awards": []}, {"img": "w04.webp", "title": "더하자, 유한젠", "yt": "RPUCzMxZFAs", "client": "유한클로락스", "agency": "PT Korea", "awards": []}];
+const AUTO=new Set([1,2,3]); // 2~4번째는 화면에 자리잡으면 자동 재생, 나머지는 눌러서 재생
 const list=document.getElementById("list");
-F.forEach((f,i)=>{const s=document.createElement("section");s.className="sec";
- const im=new Image();im.src="/assets/img/work/"+f[0]+(["w10","w11","w08","w09"].includes(f[0])?"-l":"")+".webp";im.alt="";s.appendChild(im);const v=document.createElement("div");v.className="vid";s.appendChild(v);s.dataset.yt=f[3];s.onclick=()=>openPl(f[3]);
+const pad=n=>String(n).padStart(2,"0");
+let vol=0; // 0 = 무음
+F.forEach((f,i)=>{
+ const s=document.createElement("section");s.className="sec";s.dataset.i=i;
+ const im=new Image();im.src="/assets/img/work/"+f.img;im.alt=f.title;s.appendChild(im);
+ const v=document.createElement("div");v.className="vid";s.appendChild(v);
+ if(!AUTO.has(i)){const h=document.createElement("span");h.className="playhint";h.textContent="▶ PLAY";s.appendChild(h)}
+ const hit=document.createElement("button");hit.className="hit";hit.setAttribute("aria-label",f.title+" 재생");hit.onclick=()=>play(s);s.appendChild(hit);
  const ov=document.createElement("div");ov.className="ov g";
- ov.innerHTML='<div class="row"><div><div class="lb"></div><div class="cr"></div></div><div class="ctl"><span class="idx">'+String(i+1).padStart(2,'0')+' / '+String(F.length).padStart(2,'0')+'</span><span class="rec tc">00:00:00:00</span></div></div><div class="bar1"><i></i></div>';
- ov.querySelector(".lb").textContent=f[2]+" · Dir. Park jinyong";
- ov.querySelector(".cr").textContent=f[1];
- s.appendChild(ov);list.appendChild(s)});
-const secs=[...document.querySelectorAll(".sec")];let t0=Date.now(),cur=null,yt={t:0,d:0};
-function stopV(x){const v=x.querySelector(".vid");v.classList.remove("ready");v.textContent=""}
-function playV(x){const v=x.querySelector(".vid");if(v.firstChild)return;const id=x.dataset.yt;const f=document.createElement("iframe");
- f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
- f.addEventListener("load",()=>{try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:id}),"*")}catch(e){}});
- f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");v.appendChild(f);setTimeout(()=>v.classList.add("ready"),4000)}
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.6){secs.forEach(x=>{if(x!==e.target){x.classList.remove("on");stopV(x)}});e.target.classList.add("on");yt={t:0,d:0};playV(e.target);cur=e.target;t0=Date.now()}}),{threshold:[.6]});
-const pl=document.getElementById("pl"),plb=document.getElementById("plb");
-function openPl(id){plb.innerHTML='<iframe allow="autoplay; encrypted-media; fullscreen" allowfullscreen src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1"></iframe>';pl.hidden=false}
-function closePl(){pl.hidden=true;plb.textContent=""}
-document.getElementById("plx").onclick=closePl;addEventListener("keydown",e=>{if(e.key==="Escape")closePl()});
-secs.forEach(s=>io.observe(s));
-scrollTo(0,0);
+ const row=document.createElement("div");row.className="row";
+ const L=document.createElement("div");
+ const cr=document.createElement("div");cr.className="cr";cr.textContent=f.title;L.appendChild(cr);
+ const cd=document.createElement("div");cd.className="cred";
+ [["Client",f.client],["Agency",f.agency],["Production","hize"],["Director","Park jinyong"]].forEach(([k,val])=>{if(!val)return;const sp=document.createElement("span");const b=document.createElement("b");b.textContent=k;sp.append(b,document.createTextNode(val));cd.appendChild(sp)});
+ L.appendChild(cd);
+ if(f.awards.length){const a=document.createElement("div");a.className="awd";const b=document.createElement("b");b.textContent="Awards";const ic=document.createElement("i");
+  const y=document.createElement("span");y.className="y";y.textContent=f.awards[0].slice(0,4);const n=document.createElement("span");n.className="n";
+  f.awards.forEach(x=>{const e=document.createElement("span");e.textContent=x.replace(/^\d{4}\s*/,"");n.appendChild(e)});a.append(b,ic,y,n);L.appendChild(a)}
+ const C=document.createElement("div");C.className="ctl";
+ C.innerHTML='<span class="idx">'+pad(i+1)+' / '+pad(F.length)+'</span><span class="rec tc">00:00:00:00</span><button class="vol muted" type="button" aria-label="볼륨"><span class="lbl">VOL</span><span class="bars">'+[1,2,3,4,5,6].map(k=>'<span data-k="'+k+'" style="height:'+(2+k*1.7)+'px"></span>').join("")+'</span></button>';
+ row.append(L,C);ov.appendChild(row);
+ const bar=document.createElement("div");bar.className="bar1";bar.innerHTML="<i></i>";ov.appendChild(bar);
+ s.appendChild(ov);list.appendChild(s);
+});
+const secs=[...document.querySelectorAll(".sec")];
+let cur=null,yt={t:0,d:0},t0=Date.now();
+function frameOf(s){return s&&s.querySelector(".vid iframe")}
+function cmd(s,func,args){const f=frameOf(s);if(!f)return;try{f.contentWindow.postMessage(JSON.stringify({event:"command",func:func,args:args||[]}),"*")}catch(e){}}
+function applyVol(s){if(vol>0){cmd(s,"unMute");cmd(s,"setVolume",[Math.round(vol/6*100)])}else cmd(s,"mute")}
+function paintVol(){document.querySelectorAll(".vol").forEach(b=>{b.classList.toggle("muted",vol===0);b.querySelectorAll(".bars span").forEach(x=>x.classList.toggle("on",+x.dataset.k<=vol))})}
+document.addEventListener("click",e=>{const bar=e.target.closest(".bars span"),btn=e.target.closest(".vol");if(!btn)return;e.stopPropagation();
+ if(bar){const k=+bar.dataset.k;vol=(vol===k?0:k)}else vol=vol?0:4;paintVol();const s=btn.closest(".sec");if(s&&!frameOf(s))play(s);applyVol(s)},true);
+function stop(s){s.classList.remove("playing");const v=s.querySelector(".vid");v.classList.remove("ready");v.textContent="";s.querySelector(".bar1 i").style.transform="scaleX(0)";s.querySelector(".tc").textContent="00:00:00:00"}
+function play(s){if(frameOf(s))return;const f=F[+s.dataset.i];secs.forEach(x=>{if(x!==s&&frameOf(x))stop(x)});
+ const v=s.querySelector(".vid");const fr=document.createElement("iframe");
+ fr.src="https://www.youtube-nocookie.com/embed/"+f.yt+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+f.yt+"&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
+ fr.allow="autoplay; encrypted-media";fr.title="";fr.setAttribute("tabindex","-1");
+ fr.addEventListener("load",()=>{try{fr.contentWindow.postMessage(JSON.stringify({event:"listening",id:f.yt}),"*")}catch(e){}});
+ v.appendChild(fr);s.classList.add("playing");cur=s;yt={t:0,d:0};t0=Date.now();setTimeout(()=>v.classList.add("ready"),4000)}
 addEventListener("message",e=>{if(!/youtube/.test(e.origin))return;let m;try{m=typeof e.data==="string"?JSON.parse(e.data):e.data}catch(_){return}
- if(m&&m.info){if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(typeof m.info.duration==="number"&&m.info.duration>0)yt.d=m.info.duration;if(m.info.playerState===1&&cur){setTimeout(()=>{const v=cur&&cur.querySelector(".vid");if(v)v.classList.add("ready")},250)}}});
-function tc(sec){const s=Math.floor(sec),f=Math.floor((sec-s)*24);return "00:"+String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")+":"+String(f).padStart(2,"0")}
-setInterval(()=>{if(!cur)return;const live=yt.d>0;const t=live?yt.t:(Date.now()-t0)/1000;
- cur.querySelector(".tc").textContent=tc(t);
- cur.querySelector(".bar1 i").style.transform="scaleX("+(live?Math.min(1,yt.t/yt.d):0)+")"},100);
-</script>
-</body></html>
+ if(!m||!m.info)return;if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(m.info.duration>0)yt.d=m.info.duration;
+ if(m.info.playerState===1&&cur){const v=cur.querySelector(".vid");if(!v.classList.contains("ready")){setTimeout(()=>v.classList.add("ready"),300);applyVol(cur)}}});
+const io=new IntersectionObserver(es=>es.forEach(e=>{const s=e.target,i=+s.dataset.i;
+ if(e.isIntersecting&&e.intersectionRatio>.6){if(AUTO.has(i))play(s)}
+ else if(!e.isIntersecting||e.intersectionRatio<.25){if(frameOf(s))stop(s);if(cur===s)cur=null}}),{threshold:[0,.25,.6]});
+secs.forEach(s=>io.observe(s));
+function tc(x){const s=Math.floor(x),f=Math.floor((x-s)*24);return "00:"+pad(Math.floor(s/60))+":"+pad(s%60)+":"+pad(f)}
+setInterval(()=>{if(!cur)return;const live=yt.d>0;cur.querySelector(".tc").textContent=tc(live?yt.t:0);cur.querySelector(".bar1 i").style.transform="scaleX("+(live?Math.min(1,yt.t/yt.d):0)+")"},100);
+paintVol();scrollTo(0,0);
+</script></body></html>
