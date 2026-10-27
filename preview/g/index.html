@@ -42,7 +42,7 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans)}
 .foot a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--point)}
 @media(max-width:700px){.hd nav{gap:14px;font-size:11px}.row{flex-direction:column;align-items:flex-start;gap:10px}.ctl{gap:14px}.hd .logo{width:84px}}
 @media (prefers-reduced-motion:reduce){.sec.on img,.sec.on .line i{animation:none}}
-.vid{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity .8s}
+.vid{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity .5s}
 .vid.ready{opacity:1}
 .vid iframe{position:absolute;left:50%;top:50%;width:max(100vw,177.78vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%) scale(1.02);border:0;pointer-events:none}
 .sec{cursor:pointer}
@@ -77,7 +77,7 @@ function stopV(x){const v=x.querySelector(".vid");v.classList.remove("ready");v.
 function playV(x){const v=x.querySelector(".vid");if(v.firstChild)return;const id=x.dataset.yt;const f=document.createElement("iframe");
  f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&start=4&iv_load_policy=3&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
  f.addEventListener("load",()=>{try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:id}),"*")}catch(e){}});
- f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");v.appendChild(f);setTimeout(()=>v.classList.add("ready"),1600)}
+ f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");v.appendChild(f);setTimeout(()=>v.classList.add("ready"),4000)}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.6){secs.forEach(x=>{if(x!==e.target){x.classList.remove("on");stopV(x)}});e.target.classList.add("on");yt={t:0,d:0};playV(e.target);cur=e.target;t0=Date.now()}}),{threshold:[.6]});
 const pl=document.getElementById("pl"),plb=document.getElementById("plb");
 function openPl(id){plb.innerHTML='<iframe allow="autoplay; encrypted-media; fullscreen" allowfullscreen src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1"></iframe>';pl.hidden=false}
@@ -86,7 +86,7 @@ document.getElementById("plx").onclick=closePl;addEventListener("keydown",e=>{if
 secs.forEach(s=>io.observe(s));
 scrollTo(0,0);
 addEventListener("message",e=>{if(!/youtube/.test(e.origin))return;let m;try{m=typeof e.data==="string"?JSON.parse(e.data):e.data}catch(_){return}
- if(m&&m.info){if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(typeof m.info.duration==="number"&&m.info.duration>0)yt.d=m.info.duration}});
+ if(m&&m.info){if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(typeof m.info.duration==="number"&&m.info.duration>0)yt.d=m.info.duration;if(m.info.playerState===1&&cur){setTimeout(()=>{const v=cur&&cur.querySelector(".vid");if(v)v.classList.add("ready")},250)}}});
 function tc(sec){const s=Math.floor(sec),f=Math.floor((sec-s)*24);return "00:"+String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")+":"+String(f).padStart(2,"0")}
 setInterval(()=>{if(!cur)return;const live=yt.d>0;const t=live?yt.t:(Date.now()-t0)/1000;
  cur.querySelector(".tc").textContent=tc(t);
