@@ -67,6 +67,7 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
 .pl.fit .vid iframe{width:calc(var(--vh2,100vh)*1.7778);height:var(--vh2,100vh);transform:translate(-50%,-50%) scale(1.035)}
 .pl.fit .poster{inset:auto;left:50%;top:50%;width:calc(var(--vh2,100vh)*1.7778);height:var(--vh2,100vh);transform:translate(-50%,-50%) scale(1.035);object-fit:cover}
 .pl.solo .pnav{display:none!important}
+.pl.keep .vid iframe,.pl.keep .poster{width:min(100vw,177.78vh);height:min(100vh,56.25vw)}
 .pl .shade{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.3),transparent 22%,transparent 60%,rgba(0,0,0,.55));transition:background .5s;pointer-events:none}
 .pl.open .shade{background:rgba(0,0,0,.62)}
 .pl .phd{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding-top:calc(env(safe-area-inset-top,0px) + 24px)}
@@ -232,7 +233,7 @@ function flash(play){const el=document.getElementById("pstate");el.innerHTML=pla
 function togglePlay(){paused=!paused;if(isVm())vmsg({method:paused?"pause":"play"});else cmd(paused?"pauseVideo":"playVideo");flash(!paused)}
 function sizeV(){const W=innerWidth,H=innerHeight;let h=Math.min(H,Math.max(W,screen.width||W)*9/16);if(W<700&&H>W)h=H;pl.style.setProperty("--vh2",h+"px")}
 addEventListener("resize",sizeV);sizeV();
-function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;pl.classList.add("fit");sizeV();pl.classList.toggle("solo",grp(c).length<2);
+function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;pl.classList.add("fit");pl.classList.toggle("keep",!!c.closest(".ogrid"));sizeV();pl.classList.toggle("solo",grp(c).length<2);
  pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};paused=false;dragF=null;pvid.classList.remove("ready");pvid.textContent="";
  ppost.src=c.querySelector("img").src;
  const f=document.createElement("iframe");f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");
