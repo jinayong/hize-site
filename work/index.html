@@ -64,8 +64,8 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
 .pl .vid.ready{opacity:1}
 .pl .vid iframe{position:absolute;left:50%;top:50%;width:max(100vw,177.78vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%) scale(1.2);border:0;pointer-events:none}
 .pl .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
-.pl.fit .vid iframe{width:177.78vh;height:100vh;transform:translate(-50%,-50%) scale(1.035)}
-.pl.fit .poster{inset:auto;left:50%;top:50%;width:177.78vh;height:100vh;transform:translate(-50%,-50%) scale(1.035);object-fit:cover}
+.pl.fit .vid iframe{width:calc(var(--vh2,100vh)*1.7778);height:var(--vh2,100vh);transform:translate(-50%,-50%) scale(1.035)}
+.pl.fit .poster{inset:auto;left:50%;top:50%;width:calc(var(--vh2,100vh)*1.7778);height:var(--vh2,100vh);transform:translate(-50%,-50%) scale(1.035);object-fit:cover}
 .pl.solo .pnav{display:none!important}
 .pl .shade{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.3),transparent 22%,transparent 60%,rgba(0,0,0,.55));transition:background .5s;pointer-events:none}
 .pl.open .shade{background:rgba(0,0,0,.62)}
@@ -230,7 +230,9 @@ function isVm(){const f=frame();return !!(f&&/vimeo/.test(f.src))}
 function seekTo(t){t=Math.max(0,Math.min(yt.d-0.2,t));yt.t=t;if(isVm()){vmsg({method:"setCurrentTime",value:t});vmsg({method:"seekTo",value:t})}else{cmd("seekTo",[t,true]);if(paused)cmd("pauseVideo")}}
 function flash(play){const el=document.getElementById("pstate");el.innerHTML=play?'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),300)}
 function togglePlay(){paused=!paused;if(isVm())vmsg({method:paused?"pause":"play"});else cmd(paused?"pauseVideo":"playVideo");flash(!paused)}
-function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;pl.classList.add("fit");pl.classList.toggle("solo",grp(c).length<2);
+function sizeV(){const W=innerWidth,H=innerHeight;let h=Math.min(H,Math.max(W,screen.width||W)*9/16);if(W<700&&H>W)h=H;pl.style.setProperty("--vh2",h+"px")}
+addEventListener("resize",sizeV);sizeV();
+function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;pl.classList.add("fit");sizeV();pl.classList.toggle("solo",grp(c).length<2);
  pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};paused=false;dragF=null;pvid.classList.remove("ready");pvid.textContent="";
  ppost.src=c.querySelector("img").src;
  const f=document.createElement("iframe");f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");
