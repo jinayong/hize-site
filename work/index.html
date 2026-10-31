@@ -97,7 +97,7 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
 .pbar .seek:hover .knob,.pbar .seek.drag .knob{transform:translate(-50%,-50%) scale(1)}
 .pbar .stip{position:absolute;bottom:24px;left:0;transform:translateX(-50%);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:#fff;background:rgba(0,0,0,.72);padding:6px 9px;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none}
 .pbar .seek:hover .stip,.pbar .seek.drag .stip{opacity:1}
-.pstate{position:absolute;left:50%;top:50%;z-index:2;width:78px;height:78px;margin:-39px 0 0 -39px;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.85);transition:opacity .35s,transform .35s;pointer-events:none}
+.pstate{position:absolute;left:50%;top:50%;z-index:2;width:78px;height:78px;margin:-39px 0 0 -39px;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.85);transition:opacity .2s,transform .2s;pointer-events:none}
 .pstate.show{opacity:1;transform:none}
 .pstate svg{width:26px;height:26px;fill:#fff}
 .pl .vid,.pl .poster{cursor:pointer}
@@ -228,7 +228,7 @@ let paused=false,dragF=null;
 function vmsg(o){const f=frame();if(f&&/vimeo/.test(f.src))try{f.contentWindow.postMessage(JSON.stringify(o),"*")}catch(e){}}
 function isVm(){const f=frame();return !!(f&&/vimeo/.test(f.src))}
 function seekTo(t){t=Math.max(0,Math.min(yt.d-0.2,t));yt.t=t;if(isVm()){vmsg({method:"setCurrentTime",value:t});vmsg({method:"seekTo",value:t})}else{cmd("seekTo",[t,true]);if(paused)cmd("pauseVideo")}}
-function flash(play){const el=document.getElementById("pstate");el.innerHTML=play?'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),650)}
+function flash(play){const el=document.getElementById("pstate");el.innerHTML=play?'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),300)}
 function togglePlay(){paused=!paused;if(isVm())vmsg({method:paused?"pause":"play"});else cmd(paused?"pauseVideo":"playVideo");flash(!paused)}
 function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;pl.classList.add("fit");pl.classList.toggle("solo",grp(c).length<2);
  pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};paused=false;dragF=null;pvid.classList.remove("ready");pvid.textContent="";
