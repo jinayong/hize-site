@@ -10,7 +10,7 @@
   }
   function embed(v, bg){
     if (v.kind === 'yt') {
-      var q = 'autoplay=1&playsinline=1&rel=0&modestbranding=1';
+      var q = 'autoplay=1&playsinline=1&rel=0&modestbranding=1&cc_load_policy=0&iv_load_policy=3';
       if (bg) q += '&mute=1&loop=1&controls=0&playlist=' + v.id;
       else q += '&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
       return 'https://www.youtube-nocookie.com/embed/' + v.id + '?' + q;

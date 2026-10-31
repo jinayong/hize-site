@@ -210,7 +210,7 @@ function play(s){if(frameOf(s))return;const f=F[+s.dataset.i];secs.forEach(x=>{i
  v.appendChild(fr);s.classList.add("playing");cur=s;yt={t:0,d:0};t0=Date.now();setTimeout(()=>v.classList.add("ready"),4000)}
 addEventListener("message",e=>{if(!/youtube/.test(e.origin))return;let m;try{m=typeof e.data==="string"?JSON.parse(e.data):e.data}catch(_){return}
  if(!m||!m.info)return;if(typeof m.info.currentTime==="number")yt.t=m.info.currentTime;if(m.info.duration>0)yt.d=m.info.duration;
- if(m.info.playerState===1&&cur){const v=cur.querySelector(".vid");if(!v.classList.contains("ready")){setTimeout(()=>v.classList.add("ready"),300);applyVol(cur)}cmd(cur,"unloadModule",["captions"]);cmd(cur,"unloadModule",["cc"]);}});
+ if(m.info.playerState===1&&cur){const v=cur.querySelector(".vid");if(!v.classList.contains("ready")){setTimeout(()=>v.classList.add("ready"),300);applyVol(cur)}cmd(cur,"unloadModule",["captions"]);cmd(cur,"unloadModule",["cc"]);cmd(cur,"setOption",["captions","track",{}]);}});
 const io=new IntersectionObserver(es=>es.forEach(e=>{const s=e.target,i=+s.dataset.i;
  if(e.isIntersecting&&e.intersectionRatio>.6){if(AUTO.has(i))play(s)}
  else if(!e.isIntersecting||e.intersectionRatio<.25){if(frameOf(s))stop(s);if(cur===s)cur=null}}),{threshold:[0,.25,.6]});
