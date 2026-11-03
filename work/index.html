@@ -237,7 +237,7 @@ function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const i
  pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};paused=false;dragF=null;pvid.classList.remove("ready");pvid.textContent="";
  ppost.src=c.querySelector("img").src;
  const f=document.createElement("iframe");f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");
- if(id){f.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
+ if(id){f.src="https://www.youtube.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
   f.addEventListener("load",()=>{try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:id}),"*")}catch(e){};setTimeout(()=>cmd("playVideo"),400);setTimeout(()=>cmd("playVideo"),1500);[1000,3000,6000].forEach(t=>setTimeout(noCC,t))});setTimeout(()=>pvid.classList.add("ready"),3000)}
  else{f.src="https://player.vimeo.com/video/"+vm+"?background=1&autoplay=1&loop=1&muted=1&api=1";f.addEventListener("load",()=>{["timeupdate","playProgress","play","pause"].forEach(ev=>vmsg({method:"addEventListener",value:ev}))});setTimeout(()=>pvid.classList.add("ready"),1500)}
  pvid.appendChild(f);
