@@ -64,10 +64,14 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
 .pl .vid.ready{opacity:1}
 .pl .vid iframe{position:absolute;left:50%;top:50%;width:max(100vw,177.78vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%) scale(1.2);border:0;pointer-events:none}
 .pl .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
-.pl.fit .vid iframe{width:calc(var(--vh2,100vh)*1.7778);height:var(--vh2,100vh);transform:translate(-50%,-50%) scale(1.035)}
+.pl.fit .vid{inset:auto;left:50%;top:50%;width:calc(var(--vh2,100vh)*1.7778);height:var(--vh2,100vh);transform:translate(-50%,-50%) scale(1.035);overflow:hidden}
+.pl.fit .vid iframe{left:0;top:50%;width:100%;height:calc(100% + 200px);transform:translateY(-50%)}
+.pl .vid::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .25s,backdrop-filter .25s}
+.pl.paused .vid::after{background:rgba(0,0,0,.42);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.pl.paused .pstate{opacity:1;transform:none}
 .pl.fit .poster{inset:auto;left:50%;top:50%;width:calc(var(--vh2,100vh)*1.7778);height:var(--vh2,100vh);transform:translate(-50%,-50%) scale(1.035);object-fit:cover}
 .pl.solo .pnav{display:none!important}
-.pl.keep .vid iframe,.pl.keep .poster{width:min(100vw,177.78vh);height:min(100vh,56.25vw)}
+.pl.keep .vid,.pl.keep .poster{width:min(100vw,177.78vh);height:min(100vh,56.25vw)}
 .pl .shade{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.3),transparent 22%,transparent 60%,rgba(0,0,0,.55));transition:background .5s;pointer-events:none}
 .pl.open .shade{background:rgba(0,0,0,.62)}
 .pl .phd{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding-top:calc(env(safe-area-inset-top,0px) + 24px)}
@@ -229,12 +233,12 @@ let paused=false,dragF=null;
 function vmsg(o){const f=frame();if(f&&/vimeo/.test(f.src))try{f.contentWindow.postMessage(JSON.stringify(o),"*")}catch(e){}}
 function isVm(){const f=frame();return !!(f&&/vimeo/.test(f.src))}
 function seekTo(t){t=Math.max(0,Math.min(yt.d-0.2,t));yt.t=t;if(isVm()){vmsg({method:"setCurrentTime",value:t});vmsg({method:"seekTo",value:t})}else{cmd("seekTo",[t,true]);if(paused)cmd("pauseVideo")}}
-function flash(play){const el=document.getElementById("pstate");el.innerHTML=play?'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),300)}
-function togglePlay(){paused=!paused;if(isVm())vmsg({method:paused?"pause":"play"});else cmd(paused?"pauseVideo":"playVideo");flash(!paused)}
+function flash(play){if(paused){const el=document.getElementById("pstate");el.innerHTML='<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>';return}const el=document.getElementById("pstate");el.innerHTML=play?'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),300)}
+function togglePlay(){paused=!paused;pl.classList.toggle("paused",paused);if(isVm())vmsg({method:paused?"pause":"play"});else cmd(paused?"pauseVideo":"playVideo");flash(!paused)}
 function sizeV(){const W=innerWidth,H=innerHeight;let h=Math.min(H,Math.max(W,screen.width||W)*9/16);if(W<700&&H>W)h=H;pl.style.setProperty("--vh2",h+"px")}
 addEventListener("resize",sizeV);sizeV();
 function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;pl.classList.add("fit");pl.classList.toggle("keep",!!c.closest(".ogrid"));sizeV();pl.classList.toggle("solo",grp(c).length<2);
- pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};paused=false;dragF=null;pvid.classList.remove("ready");pvid.textContent="";
+ pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};paused=false;pl.classList.remove("paused");dragF=null;pvid.classList.remove("ready");pvid.textContent="";
  ppost.src=c.querySelector("img").src;
  const f=document.createElement("iframe");f.allow="autoplay; encrypted-media";f.title="";f.setAttribute("tabindex","-1");
  if(id){f.src="https://www.youtube.com/embed/"+id+"?autoplay=1&mute=1&controls=0&loop=1&playlist="+id+"&playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&vq=hd1080&cc_load_policy=0&disablekb=1&enablejsapi=1&origin="+encodeURIComponent(location.origin);
