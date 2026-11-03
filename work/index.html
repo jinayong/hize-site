@@ -70,7 +70,9 @@ html.pl-lock,html.pl-lock body{overflow:hidden}
 .pl.paused .vid::after{background:rgba(0,0,0,.42);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .pl.paused .pstate{opacity:1;transform:none}
 .pl .vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
-.pl.mp4 .vid,.pl.mp4 .poster{transform:translate(-50%,-50%)}
+.pl.fit.mp4 .vid,.pl.fit.mp4 .poster{transform:translate(-50%,-50%)}
+.pl .poster{transition:opacity .4s}
+.pl.playing .poster{opacity:0}
 .pl.mp4.paused .vid::after{background:rgba(0,0,0,.28);backdrop-filter:none;-webkit-backdrop-filter:none}
 .pl.fit .poster{inset:auto;left:50%;top:50%;width:calc(var(--vh2,100vh)*1.7778);height:var(--vh2,100vh);transform:translate(-50%,-50%) scale(1.035);object-fit:cover}
 .pl.solo .pnav{display:none!important}
@@ -243,10 +245,10 @@ function togglePlay(){paused=!paused;pl.classList.toggle("paused",paused);const 
 function sizeV(){const W=innerWidth,H=innerHeight;let h=Math.min(H,Math.max(W,screen.width||W)*9/16);if(W<700&&H>W)h=H;pl.style.setProperty("--vh2",h+"px")}
 addEventListener("resize",sizeV);sizeV();
 function openAt(k){k=(k+cards.length)%cards.length;at=k;const c=cards[k];const id=c.dataset.yt,vm=c.dataset.vm;pl.classList.add("fit");pl.classList.toggle("keep",!!c.closest(".ogrid"));sizeV();pl.classList.toggle("solo",grp(c).length<2);
- pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};paused=false;pl.classList.remove("paused");dragF=null;pvid.classList.remove("ready");pvid.textContent="";
+ pl.hidden=false;document.documentElement.classList.add("pl-lock");setOpen(false);yt={t:0,d:0};paused=false;pl.classList.remove("paused");dragF=null;pvid.classList.remove("ready");pl.classList.remove("playing");pvid.textContent="";
  ppost.src=c.querySelector("img").src;pl.classList.toggle("mp4",!!c.dataset.mp4);
  if(c.dataset.mp4){const v=document.createElement("video");v.src=c.dataset.mp4;v.poster=ppost.src;v.loop=true;v.playsInline=true;v.setAttribute("playsinline","");v.preload="auto";v.muted=vol===0;v.volume=vol/6;
-  v.addEventListener("timeupdate",()=>{yt.t=v.currentTime;if(v.duration>0)yt.d=v.duration});v.addEventListener("loadedmetadata",()=>{if(v.duration>0)yt.d=v.duration});v.addEventListener("playing",()=>{pvid.classList.add("ready")});
+  v.addEventListener("timeupdate",()=>{yt.t=v.currentTime;if(v.duration>0)yt.d=v.duration});v.addEventListener("loadedmetadata",()=>{if(v.duration>0)yt.d=v.duration});v.addEventListener("playing",()=>{pvid.classList.add("ready");pl.classList.add("playing")});
   pvid.appendChild(v);const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{v.muted=true;if(vol>0){vol=0;paintVol();tip()}v.play().catch(()=>{})});
   const tt0=document.getElementById("ptt");tt0.textContent=c.dataset.title+" ";const sp0=document.createElement("span");sp0.textContent="— "+c.dataset.client;tt0.appendChild(sp0);
   info(c);pl.hidden=false;document.documentElement.classList.add("pl-lock");paintVol();requestAnimationFrame(setBarH);return}
